@@ -2,6 +2,9 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+
 <style>
 body{
   margin:0;
@@ -11,10 +14,13 @@ body{
   justify-content:center;
   height:100vh;
   font-family:Arial;
+  transition:0.3s;
 }
 
 body.dark{background:#000;color:white;}
 body.light{background:#fff;color:black;}
+
+h3{color:#a855f7;}
 
 #box{
   width:120px;
@@ -22,9 +28,16 @@ body.light{background:#fff;color:black;}
   background:#333;
   border-radius:10px;
   margin-top:20px;
+  box-shadow:0 0 15px #a855f7;
 }
 
 #box.active{background:#a855f7;}
+
+.leaderboard{
+  margin-top:20px;
+  text-align:left;
+  width:200px;
+}
 </style>
 </head>
 
@@ -34,18 +47,39 @@ body.light{background:#fff;color:black;}
 <div id="box"></div>
 <p id="time">0 ms</p>
 
+<div class="leaderboard">
+  <h4>Top 5</h4>
+  <ol id="board"></ol>
+</div>
+
 <script>
+// 🔑 YOUR SUPABASE KEYS
+const SUPABASE_URL = "https://yxjcuiyqddqyrlzjcjby.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl4amN1aXlxZGRxeXJsempjamJ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc5MDQyMDMsImV4cCI6MjA5MzQ4MDIwM30.vd1vJ25in85ghRYrl-1ZKwM7vYWUQvYxw1e8HHwExO0";
+
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// username (saved once)
+let user = localStorage.getItem("username");
+if(!user){
+  user = prompt("enter your name");
+  localStorage.setItem("username", user || "pro");
+}
+
+// theme
+document.body.className = localStorage.getItem("theme") || "dark";
+
 const box=document.getElementById("box");
 const timeEl=document.getElementById("time");
+const board=document.getElementById("board");
 
 let start,ready;
 
-/* theme */
-document.body.className = localStorage.getItem("theme") || "dark";
-
+/* GAME */
 function startGame(){
   ready=false;
   box.classList.remove("active");
+  timeEl.textContent="wait...";
 
   setTimeout(()=>{
     box.classList.add("active");
@@ -54,7 +88,7 @@ function startGame(){
   },Math.random()*2000+1000);
 }
 
-box.onclick=()=>{
+box.onclick=async ()=>{
   if(!ready){
     timeEl.textContent="too early";
     return;
@@ -63,14 +97,33 @@ box.onclick=()=>{
   const t=Date.now()-start;
   timeEl.textContent=t+" ms";
 
-  let best=localStorage.getItem("best")||9999;
-  if(t<best){
-    localStorage.setItem("best",t);
-  }
+  await supabase.from("scores").insert([
+    { name:user, time:t }
+  ]);
 
+  loadBoard();
   startGame();
 };
 
+/* LEADERBOARD */
+async function loadBoard(){
+  let { data } = await supabase
+    .from("scores")
+    .select("*")
+    .order("time", { ascending:true })
+    .limit(5);
+
+  board.innerHTML="";
+  if(data){
+    data.forEach(s=>{
+      const li=document.createElement("li");
+      li.textContent = s.name + " - " + s.time + "ms";
+      board.appendChild(li);
+    });
+  }
+}
+
+loadBoard();
 startGame();
 </script>
 
