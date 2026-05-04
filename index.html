@@ -17,20 +17,14 @@
       margin-top: 40px;
       letter-spacing: 3px;
       color: #4f9dff;
-
-      text-shadow:
-        0 0 5px #4f9dff,
-        0 0 10px #4f9dff,
-        0 0 20px #4f9dff,
-        0 0 40px #4f9dff;
-
+      text-shadow: 0 0 10px #4f9dff, 0 0 30px #4f9dff;
       animation: glow 2s infinite;
     }
 
     @keyframes glow {
-      0% { text-shadow: 0 0 5px #4f9dff; }
-      50% { text-shadow: 0 0 25px #4f9dff, 0 0 50px #4f9dff; }
-      100% { text-shadow: 0 0 5px #4f9dff; }
+      0% { text-shadow: 0 0 10px #4f9dff; }
+      50% { text-shadow: 0 0 30px #4f9dff, 0 0 60px #4f9dff; }
+      100% { text-shadow: 0 0 10px #4f9dff; }
     }
 
     .container {
@@ -50,30 +44,45 @@
     .images img {
       width: 300px;
       border-radius: 12px;
-
-      /* glow border */
       border: 2px solid #4f9dff;
-      box-shadow:
-        0 0 10px #4f9dff,
-        0 0 20px #4f9dff,
-        0 0 40px #4f9dff;
-
+      box-shadow: 0 0 20px #4f9dff, 0 0 40px #4f9dff;
       transition: 0.3s;
     }
 
     .images img:hover {
       transform: scale(1.07);
+      box-shadow: 0 0 40px #4f9dff, 0 0 80px #4f9dff;
+    }
 
-      box-shadow:
-        0 0 20px #4f9dff,
-        0 0 40px #4f9dff,
-        0 0 80px #4f9dff;
+    /* SOCIALS */
+    .socials {
+      margin-top: 50px;
+    }
+
+    .socials h2 {
+      margin-bottom: 20px;
+    }
+
+    .socials a {
+      display: inline-block;
+      margin: 10px;
+      padding: 12px 20px;
+      background: #1e293b;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      border: 1px solid #4f9dff;
+      transition: 0.3s;
+    }
+
+    .socials a:hover {
+      background: #4f9dff;
+      box-shadow: 0 0 15px #4f9dff;
     }
 
     p {
       color: #9ca3af;
       font-size: 18px;
-      margin-top: 10px;
     }
   </style>
 </head>
@@ -82,12 +91,24 @@
   <div class="container">
     <h1>ANIRUDH 67</h1>
 
-    <p>Welcome to the zestyrud 67 site!</p>
+    <p>W31C0M3 70 7H3 4NDrUDH 67 5173</p>
 
     <div class="images">
       <img src="image1.jpg">
       <img src="image2.jpg">
     </div>
+
+    <!-- SOCIALS -->
+    <div class="socials">
+      <h2>Socials</h2>
+
+      <a href="https://instagram.com/pro191013" target="_blank">Instagram</a>
+
+      <a href="https://snapchat.com/add/pro_king690" target="_blank">Snapchat</a>
+
+      <a href="https://wa.me/447349901324" target="_blank">WhatsApp</a>
+    </div>
+
   </div>
 </body>
 </html>
