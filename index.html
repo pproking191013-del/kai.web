@@ -43,27 +43,20 @@
       transition: 0.3s;
     }
 
-    /* DARK NAV */
     body.dark .navbar a {
       color: white;
     }
 
-    body.dark .navbar a:hover {
-      color: #a855f7;
-      text-shadow: 0 0 10px #a855f7;
-    }
-
-    body.dark .navbar {
-      background: rgba(0,0,0,0.4);
-    }
-
-    /* LIGHT NAV */
     body.light .navbar a {
       color: black;
     }
 
-    body.light .navbar a:hover {
-      color: #7c3aed;
+    .navbar a:hover {
+      color: #a855f7;
+    }
+
+    body.dark .navbar {
+      background: rgba(0,0,0,0.4);
     }
 
     body.light .navbar {
@@ -97,7 +90,14 @@
       pointer-events: all;
     }
 
-    /* BACKGROUNDS */
+    /* GRADIENT */
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* DARK */
     body.dark #about {
       background: linear-gradient(270deg, #000000, #4c1d95, #000000);
     }
@@ -110,6 +110,7 @@
       background: linear-gradient(270deg, #000000, #312e81, #000000);
     }
 
+    /* LIGHT */
     body.light #about {
       background: linear-gradient(270deg, #ffffff, #e9d5ff, #ffffff);
     }
@@ -122,13 +123,6 @@
       background: linear-gradient(270deg, #ffffff, #ddd6fe, #ffffff);
     }
 
-    @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* TEXT */
     h1 {
       font-size: 70px;
       color: #a855f7;
@@ -148,6 +142,7 @@
       background: rgba(255,255,255,0.05);
       backdrop-filter: blur(10px);
       transition: 0.3s;
+      width: 260px;
     }
 
     .project:hover {
@@ -166,7 +161,11 @@
     .socials a:hover {
       color: #a855f7;
       transform: scale(1.2);
-      text-shadow: 0 0 15px #a855f7;
+    }
+
+    a.project-link {
+      text-decoration: none;
+      color: inherit;
     }
 
   </style>
@@ -195,10 +194,13 @@
   <div class="section" id="projects">
     <h1>projects</h1>
 
-    <div class="project">
-      <h2>To-Do App</h2>
-      <p>a simple task manager i built</p>
-    </div>
+    <a href="todo.html" class="project-link">
+      <div class="project">
+        <h2>To-Do App</h2>
+        <p>click to open</p>
+      </div>
+    </a>
+
   </div>
 
   <!-- CONTACT -->
