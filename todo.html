@@ -4,10 +4,36 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
-body{font-family:Arial;margin:0;display:flex;justify-content:center;align-items:center;height:100vh;}
-.box{width:320px;padding:20px;border-radius:16px;box-shadow:0 0 20px #a855f7;}
-input,button{padding:8px;margin-top:5px;}
-ul{list-style:none;padding:0;margin-top:10px;}
+body{
+  font-family:Arial;
+  margin:0;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+  transition:0.3s;
+}
+
+body.dark{background:#000;color:white;}
+body.light{background:#fff;color:black;}
+
+.box{
+  width:320px;
+  padding:20px;
+  border-radius:16px;
+  box-shadow:0 0 20px #a855f7;
+}
+
+input,button{
+  padding:8px;
+  margin-top:5px;
+}
+
+ul{
+  list-style:none;
+  padding:0;
+  margin-top:10px;
+}
 
 li{
   background:#222;
@@ -16,22 +42,30 @@ li{
   border-radius:10px;
   display:flex;
   justify-content:space-between;
-  touch-action:pan-y;
 }
 
-.done{opacity:0.5;text-decoration:line-through;}
-
-.progress{
-  height:6px;
-  background:#444;
-  border-radius:10px;
-  margin-top:10px;
+.done{
+  opacity:0.5;
+  text-decoration:line-through;
 }
-.bar{
-  height:6px;
+
+/* notification popup */
+#notif{
+  position:fixed;
+  top:20px;
+  right:20px;
   background:#a855f7;
-  width:0%;
-  border-radius:10px;
+  color:white;
+  padding:15px;
+  border-radius:12px;
+  box-shadow:0 0 20px #a855f7;
+  display:none;
+  animation:slide 0.4s ease;
+}
+
+@keyframes slide{
+  from{transform:translateX(100%);opacity:0;}
+  to{transform:translateX(0);opacity:1;}
 }
 </style>
 </head>
@@ -42,47 +76,43 @@ li{
 <h2>To-Do</h2>
 
 <input id="task" placeholder="task">
-<input type="date" id="date">
+<input type="datetime-local" id="date">
 <button onclick="add()">Add</button>
 
 <ul id="list"></ul>
-
-<div class="progress"><div class="bar" id="bar"></div></div>
-
 </div>
+
+<div id="notif"></div>
 
 <script>
 let tasks = JSON.parse(localStorage.getItem("tasks")||"[]");
 const list=document.getElementById("list");
-const bar=document.getElementById("bar");
+const notif=document.getElementById("notif");
 
 /* SOUND */
-function beep(freq){
+function beep(){
   const ctx=new AudioContext();
   const osc=ctx.createOscillator();
-  osc.frequency.value=freq;
+  osc.frequency.value=900;
   osc.connect(ctx.destination);
   osc.start();
-  osc.stop(ctx.currentTime+0.05);
+  osc.stop(ctx.currentTime+0.1);
 }
 
+/* SAVE */
 function save(){
   localStorage.setItem("tasks",JSON.stringify(tasks));
   render();
 }
 
+/* RENDER */
 function render(){
   list.innerHTML="";
-  let doneCount=0;
-
   tasks.forEach((t,i)=>{
-    if(t.done) doneCount++;
-
     const li=document.createElement("li");
-    li.draggable=true;
 
     li.innerHTML = `
-      <span>${t.text} (${t.date||"no date"})</span>
+      <span>${t.text} ${t.date ? "(" + t.date + ")" : ""}</span>
       <span>✔️</span>
     `;
 
@@ -90,70 +120,65 @@ function render(){
 
     li.onclick=()=>{
       t.done=!t.done;
-      beep(800);
       save();
     };
 
-    /* swipe delete */
-    let startX=0;
-    li.addEventListener("touchstart",e=>startX=e.touches[0].clientX);
-    li.addEventListener("touchend",e=>{
-      let endX=e.changedTouches[0].clientX;
-      if(startX-endX>50){
-        tasks.splice(i,1);
-        beep(200);
-        save();
-      }
-    });
-
-    /* drag reorder */
-    li.ondragstart=()=>li.classList.add("drag");
-    li.ondragend=()=>li.classList.remove("drag");
-
     list.appendChild(li);
   });
-
-  /* progress */
-  let percent = tasks.length ? (doneCount/tasks.length)*100 : 0;
-  bar.style.width = percent+"%";
 }
 
-/* reorder logic */
-list.addEventListener("dragover",e=>{
-  e.preventDefault();
-  const dragging=document.querySelector(".drag");
-  const after = [...list.children].find(child=>{
-    return e.clientY <= child.offsetTop + child.offsetHeight/2;
-  });
-  list.insertBefore(dragging, after);
-});
-
-/* rebuild order */
-list.addEventListener("drop",()=>{
-  const newTasks=[];
-  [...list.children].forEach(li=>{
-    const text=li.innerText.split(" (")[0];
-    const t = tasks.find(x=>x.text===text);
-    newTasks.push(t);
-  });
-  tasks=newTasks;
-  save();
-});
-
+/* ADD */
 function add(){
   const text=document.getElementById("task").value;
   const date=document.getElementById("date").value;
 
   if(!text) return;
 
-  tasks.push({text, date, done:false});
-  beep(1200);
+  tasks.push({
+    text,
+    date,
+    done:false,
+    notified:false
+  });
 
   document.getElementById("task").value="";
   save();
 }
 
+/* NOTIFICATION */
+function showNotif(msg){
+  notif.textContent = msg;
+  notif.style.display="block";
+  beep();
+
+  setTimeout(()=>{
+    notif.style.display="none";
+  },4000);
+}
+
+/* CHECK DUE TASKS */
+function checkDue(){
+  const now = new Date();
+
+  tasks.forEach(t=>{
+    if(!t.date || t.done || t.notified) return;
+
+    const due = new Date(t.date);
+
+    if(now >= due){
+      showNotif("⏰ " + t.text + " is due!");
+      t.notified = true;
+      save();
+    }
+  });
+}
+
+/* theme */
+document.body.className = localStorage.getItem("theme") || "dark";
+
+/* run */
 render();
+setInterval(checkDue, 5000);
 </script>
 
 </body>
