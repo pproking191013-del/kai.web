@@ -1,21 +1,19 @@
+<script>
 const box = document.getElementById("box");
 const result = document.getElementById("result");
 
 let start = 0;
 let ready = false;
-let timeout;
 
-/* start new round */
 function startGame(){
   ready = false;
-
-  box.style.background = "#ff3b3b"; // RED
+  box.classList.remove("active");
+  box.style.background = "#ff3b3b";
   result.textContent = "wait...";
 
-  clearTimeout(timeout);
-
-  timeout = setTimeout(()=>{
-    box.style.background = "#22c55e"; // GREEN
+  setTimeout(()=>{
+    box.classList.add("active");
+    box.style.background = "#22c55e";
     result.textContent = "CLICK!";
     start = Date.now();
     ready = true;
@@ -23,22 +21,16 @@ function startGame(){
 }
 
 box.onclick = ()=>{
-  // clicked too early
   if(!ready){
     result.textContent = "too early 💀";
-    clearTimeout(timeout);
-    setTimeout(startGame, 1000);
     return;
   }
 
-  // correct click
   const time = Date.now() - start;
   result.textContent = time + " ms";
 
-  ready = false;
-
-  // short delay before next round
-  setTimeout(startGame, 1000);
+  startGame();
 };
 
 startGame();
+</script>
