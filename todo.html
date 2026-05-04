@@ -4,8 +4,13 @@
   <title>To-Do App</title>
 
   <style>
-    body {
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
       font-family: Arial, sans-serif;
       background: linear-gradient(135deg, #000000, #4c1d95);
       color: white;
@@ -15,6 +20,23 @@
       height: 100vh;
     }
 
+    /* NAVBAR */
+    .navbar {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      padding: 15px 20px;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(10px);
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+    }
+
+    /* APP */
     .app {
       width: 350px;
       background: rgba(0,0,0,0.4);
@@ -45,8 +67,8 @@
 
     button {
       padding: 10px;
-      border: none;
       margin-left: 5px;
+      border: none;
       background: #a855f7;
       color: white;
       border-radius: 6px;
@@ -59,7 +81,6 @@
 
     ul {
       list-style: none;
-      padding: 0;
       margin-top: 20px;
     }
 
@@ -84,7 +105,7 @@
 
     .delete {
       color: red;
-      cursor: pointer;
+      font-weight: bold;
     }
 
   </style>
@@ -92,11 +113,17 @@
 
 <body>
 
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <a href="index.html">← back</a>
+  </div>
+
+  <!-- APP -->
   <div class="app">
     <h1>To-Do</h1>
 
     <div class="input-box">
-      <input id="input" placeholder="Add a task...">
+      <input id="input" placeholder="Add a task..." onkeypress="handleKey(event)">
       <button onclick="addTask()">Add</button>
     </div>
 
@@ -111,6 +138,7 @@
 
     function render() {
       list.innerHTML = "";
+
       tasks.forEach((task, index) => {
         const li = document.createElement("li");
 
@@ -143,6 +171,10 @@
       tasks.push({ text: input.value, done: false });
       input.value = "";
       save();
+    }
+
+    function handleKey(e) {
+      if (e.key === "Enter") addTask();
     }
 
     function save() {
