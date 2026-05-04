@@ -3,6 +3,9 @@
 <head>
   <title>ANIRUDH</title>
 
+  <!-- ICONS (Font Awesome CDN) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
   <style>
     body {
       margin: 0;
@@ -10,6 +13,31 @@
       background: #0f172a;
       color: white;
       text-align: center;
+      scroll-behavior: smooth;
+    }
+
+    /* NAVBAR */
+    .navbar {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      background: #020617;
+      padding: 15px;
+      border-bottom: 1px solid #4f9dff;
+      position: sticky;
+      top: 0;
+    }
+
+    .navbar a {
+      color: white;
+      text-decoration: none;
+      font-size: 18px;
+      transition: 0.3s;
+    }
+
+    .navbar a:hover {
+      color: #4f9dff;
+      text-shadow: 0 0 10px #4f9dff;
     }
 
     h1 {
@@ -54,61 +82,77 @@
       box-shadow: 0 0 40px #4f9dff, 0 0 80px #4f9dff;
     }
 
-    /* SOCIALS */
-    .socials {
-      margin-top: 50px;
-    }
-
-    .socials h2 {
-      margin-bottom: 20px;
-    }
-
-    .socials a {
-      display: inline-block;
-      margin: 10px;
-      padding: 12px 20px;
-      background: #1e293b;
-      color: white;
-      text-decoration: none;
-      border-radius: 8px;
-      border: 1px solid #4f9dff;
-      transition: 0.3s;
-    }
-
-    .socials a:hover {
-      background: #4f9dff;
-      box-shadow: 0 0 15px #4f9dff;
+    .section {
+      margin-top: 80px;
     }
 
     p {
       color: #9ca3af;
       font-size: 18px;
     }
+
+    /* SOCIAL ICONS */
+    .socials {
+      margin-top: 20px;
+    }
+
+    .socials a {
+      display: inline-block;
+      margin: 15px;
+      font-size: 32px;
+      color: white;
+      transition: 0.3s;
+    }
+
+    .socials a:hover {
+      color: #4f9dff;
+      text-shadow: 0 0 15px #4f9dff;
+      transform: scale(1.2);
+    }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <h1>ANIRUDH 67</h1>
 
-    <p>W31C0M3 70 7H3 4NDrUDH 67 5173</p>
+  <!-- NAVBAR -->
+  <div class="navbar">
+    <a href="#about">About</a>
+    <a href="#socials">Socials</a>
+  </div>
+
+  <!-- ABOUT -->
+  <div class="container" id="about">
+    <h1>ANIRUDH 67</h1>
+    <p>welcome to el anirudh 67.web!1!!</p>
 
     <div class="images">
       <img src="image1.jpg">
       <img src="image2.jpg">
     </div>
-
-    <!-- SOCIALS -->
-    <div class="socials">
-      <h2>Socials</h2>
-
-      <a href="https://instagram.com/pro191013" target="_blank">Instagram</a>
-
-      <a href="https://snapchat.com/add/pro_king690" target="_blank">Snapchat</a>
-
-      <a href="https://wa.me/447349901324" target="_blank">WhatsApp</a>
-    </div>
-
   </div>
+
+  <!-- SOCIALS -->
+  <div class="container section" id="socials">
+    <h2>Socials</h2>
+
+    <div class="socials">
+      <a href="https://instagram.com/pro191013" target="_blank">
+        <i class="fab fa-instagram"></i>
+      </a>
+
+      <a href="https://snapchat.com/add/pro_king699" target="_blank">
+        <i class="fab fa-snapchat"></i>
+      </a>
+
+      <a href="https://www.tiktok.com/@pro_king690" target="_blank">
+        <i class="fab fa-tiktok"></i>
+      </a>
+
+      <a href="https://wa.me/447349901324" target="_blank">
+        <i class="fab fa-whatsapp"></i>
+      </a>
+    </div>
+  </div>
+
 </body>
 </html>
