@@ -158,21 +158,21 @@ function showNotif(msg){
 
 /* CHECK DUE TASKS */
 function checkDue(){
-  const now = new Date();
+  const now = Date.now();
 
   tasks.forEach(t=>{
     if(!t.date || t.done || t.notified) return;
 
-    const due = new Date(t.date);
+    const due = new Date(t.date).getTime();
 
-    if(now >= due){
+    if(now >= due && now - due < 2000){
       showNotif("⏰ " + t.text + " is due!");
       t.notified = true;
       save();
     }
   });
 }
-
+  
 /* theme */
 document.body.className = localStorage.getItem("theme") || "dark";
 
