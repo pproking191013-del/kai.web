@@ -3,20 +3,15 @@
 <head>
   <title>KaiWeb</title>
 
-  <!-- ICONS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin:0; padding:0; box-sizing:border-box; }
 
     body {
       font-family: Arial, sans-serif;
       overflow: hidden;
-      transition: background 0.5s ease, color 0.5s ease;
+      transition: 0.5s;
     }
 
     /* NAVBAR */
@@ -30,55 +25,22 @@
       padding: 15px 30px;
       backdrop-filter: blur(10px);
       z-index: 1000;
-      transition: background 0.5s ease;
     }
 
-    .nav-links {
-      display: flex;
-      gap: 30px;
-    }
+    .nav-links { display: flex; gap: 30px; }
 
     .navbar a {
+      cursor: pointer;
       text-decoration: none;
-      cursor: pointer;
-      transition: 0.3s;
     }
 
-    .toggle {
-      font-size: 22px;
-      cursor: pointer;
-      transition: transform 0.2s;
-    }
+    body.dark .navbar { background: rgba(0,0,0,0.4); }
+    body.light .navbar { background: rgba(255,255,255,0.6); }
 
-    .toggle:hover {
-      transform: scale(1.2);
-    }
+    body.dark .navbar a { color: white; }
+    body.light .navbar a { color: black; }
 
-    /* DARK NAV */
-    body.dark .navbar {
-      background: rgba(0,0,0,0.4);
-    }
-
-    body.dark .navbar a {
-      color: white;
-    }
-
-    body.dark .navbar a:hover {
-      color: #a855f7;
-    }
-
-    /* LIGHT NAV */
-    body.light .navbar {
-      background: rgba(255,255,255,0.6);
-    }
-
-    body.light .navbar a {
-      color: black;
-    }
-
-    body.light .navbar a:hover {
-      color: #7c3aed;
-    }
+    .toggle { cursor: pointer; font-size: 22px; }
 
     /* SECTIONS */
     .section {
@@ -89,14 +51,9 @@
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      text-align: center;
-
       opacity: 0;
       pointer-events: none;
-      transition: opacity 0.6s ease;
-
-      background-size: 400% 400%;
-      animation: gradientMove 15s ease infinite;
+      transition: 0.6s;
     }
 
     .active {
@@ -104,82 +61,38 @@
       pointer-events: all;
     }
 
-    @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
+    /* BG */
+    body.dark #about { background: linear-gradient(270deg,#000,#4c1d95,#000); }
+    body.dark #projects { background: linear-gradient(270deg,#020617,#1e3a8a,#020617); }
+    body.dark #contact { background: linear-gradient(270deg,#000,#312e81,#000); }
 
-    /* DARK BG */
-    body.dark #about {
-      background: linear-gradient(270deg, #000000, #4c1d95, #000000);
-    }
+    body.light #about { background: linear-gradient(270deg,#fff,#e9d5ff,#fff); }
+    body.light #projects { background: linear-gradient(270deg,#fff,#dbeafe,#fff); }
+    body.light #contact { background: linear-gradient(270deg,#fff,#ddd6fe,#fff); }
 
-    body.dark #projects {
-      background: linear-gradient(270deg, #020617, #1e3a8a, #020617);
-    }
-
-    body.dark #contact {
-      background: linear-gradient(270deg, #000000, #312e81, #000000);
-    }
-
-    /* LIGHT BG */
-    body.light #about {
-      background: linear-gradient(270deg, #ffffff, #e9d5ff, #ffffff);
-    }
-
-    body.light #projects {
-      background: linear-gradient(270deg, #ffffff, #dbeafe, #ffffff);
-    }
-
-    body.light #contact {
-      background: linear-gradient(270deg, #ffffff, #ddd6fe, #ffffff);
-    }
-
-    /* TEXT */
+    /* TITLE */
     h1 {
       font-size: 70px;
       color: #a855f7;
       text-shadow: 0 0 20px #a855f7;
     }
 
-    p {
-      margin-top: 10px;
-      opacity: 0.8;
-    }
-
-    /* PROJECT CARD */
+    /* PROJECT */
     .project {
       margin-top: 30px;
       padding: 20px;
       border-radius: 12px;
       background: rgba(255,255,255,0.05);
-      backdrop-filter: blur(10px);
-      transition: 0.3s;
-      width: 260px;
+      width: 320px;
     }
 
-    .project:hover {
-      transform: scale(1.05);
+    iframe {
+      width: 350px;
+      height: 400px;
+      border: none;
+      margin-top: 20px;
+      border-radius: 12px;
       box-shadow: 0 0 20px #a855f7;
-    }
-
-    a.project-link {
-      text-decoration: none;
-      color: inherit;
-    }
-
-    /* SOCIALS */
-    .socials a {
-      margin: 15px;
-      font-size: 30px;
-      color: inherit;
-      transition: 0.3s;
-    }
-
-    .socials a:hover {
-      color: #a855f7;
-      transform: scale(1.2);
     }
 
   </style>
@@ -187,75 +100,48 @@
 
 <body>
 
-  <!-- NAVBAR -->
+  <!-- NAV -->
   <div class="navbar">
     <div class="nav-links">
       <a onclick="showSection('about')">About</a>
       <a onclick="showSection('projects')">Projects</a>
       <a onclick="showSection('contact')">Contact</a>
     </div>
-
     <span class="toggle" onclick="toggleTheme()">🌙</span>
   </div>
 
   <!-- ABOUT -->
   <div class="section active" id="about">
-    <h1>kaiweb</h1>
-    <p>clean. simple. mine.</p>
+    <h1 id="typing"></h1>
   </div>
 
   <!-- PROJECTS -->
   <div class="section" id="projects">
     <h1>projects</h1>
 
-    <a href="todo.html" class="project-link">
-      <div class="project">
-        <h2>To-Do App</h2>
-        <p>click to open</p>
-      </div>
-    </a>
+    <div class="project">
+      <h2>To-Do App</h2>
+      <p>live preview</p>
 
+      <!-- iframe preview -->
+      <iframe src="todo.html"></iframe>
+    </div>
   </div>
 
   <!-- CONTACT -->
   <div class="section" id="contact">
     <h1>socials</h1>
-
-    <div class="socials">
-      <a href="https://instagram.com/pro191013" target="_blank">
-        <i class="fab fa-instagram"></i>
-      </a>
-
-      <a href="https://snapchat.com/add/pro_king699" target="_blank">
-        <i class="fab fa-snapchat"></i>
-      </a>
-
-      <a href="https://www.tiktok.com/@pro_king690" target="_blank">
-        <i class="fab fa-tiktok"></i>
-      </a>
-
-      <a href="https://wa.me/447349901324" target="_blank">
-        <i class="fab fa-whatsapp"></i>
-      </a>
-    </div>
   </div>
 
-  <!-- JS -->
   <script>
     function showSection(id) {
-      document.querySelectorAll('.section').forEach(sec => {
-        sec.classList.remove('active');
-      });
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
       document.getElementById(id).classList.add('active');
     }
 
     function setTheme(theme) {
-      document.body.classList.remove('dark', 'light');
-      document.body.classList.add(theme);
-
-      const toggle = document.querySelector('.toggle');
-      toggle.textContent = theme === 'dark' ? '🌙' : '☀️';
-
+      document.body.className = theme;
+      document.querySelector('.toggle').textContent = theme === 'dark' ? '🌙' : '☀️';
       localStorage.setItem('theme', theme);
     }
 
@@ -264,16 +150,24 @@
       setTheme(current === 'dark' ? 'light' : 'dark');
     }
 
-    // INIT THEME
-    const savedTheme = localStorage.getItem('theme');
+    // theme load
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setTheme(saved || (prefersDark ? 'dark' : 'light'));
 
-    if (savedTheme) {
-      setTheme(savedTheme);
-    } else {
-      // detect system theme
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(prefersDark ? 'dark' : 'light');
+    // typing animation
+    const text = "kaiweb";
+    let i = 0;
+
+    function type() {
+      if (i < text.length) {
+        document.getElementById("typing").innerHTML += text.charAt(i);
+        i++;
+        setTimeout(type, 120);
+      }
     }
+
+    type();
   </script>
 
 </body>
