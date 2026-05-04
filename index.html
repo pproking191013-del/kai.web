@@ -3,6 +3,8 @@
 <head>
   <title>KaiWeb</title>
 
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
@@ -29,9 +31,17 @@
       z-index: 1000;
     }
 
-    .nav-links { display:flex; gap:30px; }
+    .nav-links {
+      display:flex;
+      gap:30px;
+    }
 
-    .navbar a { cursor:pointer; text-decoration:none; }
+    .navbar a {
+      cursor:pointer;
+      text-decoration:none;
+      padding:8px 12px; /* bigger tap area */
+      border-radius:8px;
+    }
 
     body.dark .navbar { background:rgba(0,0,0,0.4); }
     body.light .navbar { background:rgba(255,255,255,0.6); }
@@ -39,9 +49,13 @@
     body.dark .navbar a { color:white; }
     body.light .navbar a { color:black; }
 
-    .toggle { cursor:pointer; font-size:22px; }
+    .toggle {
+      cursor:pointer;
+      font-size:22px;
+      padding:8px; /* bigger tap */
+    }
 
-    /* SECTIONS (FIXED SLIDE) */
+    /* SECTIONS */
     .section {
       position: absolute;
       top: 0;
@@ -57,12 +71,11 @@
       transition: left 0.6s cubic-bezier(0.77,0,0.175,1);
       background-size: 400% 400%;
       animation: gradientMove 15s ease infinite;
-
-      will-change: transform;
+      text-align:center;
+      padding:20px;
     }
 
-    .section.active { left: 0; z-index: 2; }
-    .section.exit-left { left: -100%; }
+    .section.active { left: 0; }
 
     @keyframes gradientMove {
       0% { background-position:0% 50%; }
@@ -80,20 +93,20 @@
     body.light #socials { background: linear-gradient(270deg,#fff,#ddd6fe,#fff); }
 
     h1 {
-      font-size: 70px;
+      font-size: 60px;
       color: #a855f7;
       text-shadow: 0 0 20px #a855f7;
     }
 
     p { margin-top:10px; opacity:0.8; }
 
-    /* PROJECT */
     .project {
       margin-top:30px;
       padding:20px;
       border-radius:12px;
       background: rgba(255,255,255,0.05);
       width:300px;
+      max-width:90%;
     }
 
     iframe {
@@ -105,17 +118,57 @@
       box-shadow:0 0 20px #a855f7;
     }
 
-    /* SOCIALS */
     .socials a {
       margin:15px;
       font-size:30px;
       color:inherit;
-      transition:0.3s;
+      display:inline-block;
+      padding:10px; /* easier tapping */
     }
 
     .socials a:hover {
       color:#a855f7;
       transform:scale(1.2);
+    }
+
+    /* 📱 MOBILE FIXES */
+    @media (max-width: 768px) {
+
+      h1 {
+        font-size: 40px;
+      }
+
+      .nav-links {
+        gap: 10px;
+      }
+
+      .navbar {
+        padding: 10px 15px;
+      }
+
+      .navbar a {
+        font-size: 14px;
+        padding: 10px 14px; /* BIG tap targets */
+      }
+
+      .toggle {
+        font-size: 20px;
+        padding: 10px;
+      }
+
+      .project {
+        width: 100%;
+      }
+
+      iframe {
+        height: 200px;
+      }
+
+      .socials a {
+        font-size: 26px;
+        margin:10px;
+        padding:12px;
+      }
     }
 
   </style>
@@ -132,13 +185,11 @@
     <span class="toggle" onclick="toggleTheme()">🌙</span>
   </div>
 
-  <!-- ABOUT -->
   <div class="section active" id="about">
     <h1 id="typing"></h1>
     <p>clean. simple. mine.</p>
   </div>
 
-  <!-- PROJECTS -->
   <div class="section" id="projects">
     <h1>projects</h1>
     <div class="project">
@@ -147,7 +198,6 @@
     </div>
   </div>
 
-  <!-- SOCIALS -->
   <div class="section" id="socials">
     <h1>socials</h1>
     <div class="socials">
@@ -162,7 +212,6 @@
     function showSection(id) {
       const current = document.querySelector('.section.active');
       const next = document.getElementById(id);
-
       if (current === next) return;
 
       next.style.left = "100%";
