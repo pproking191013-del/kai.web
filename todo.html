@@ -2,14 +2,14 @@
 <html>
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
 body{
   font-family:Arial;
   margin:0;
   display:flex;
-  flex-direction:column;
-  align-items:center;
   justify-content:center;
+  align-items:center;
   height:100vh;
   transition:0.3s;
 }
@@ -18,30 +18,91 @@ body.dark{background:#000;color:white;}
 body.light{background:#fff;color:black;}
 
 .box{
-  padding:20px;
-  border-radius:12px;
-  box-shadow:0 0 20px #a855f7;
   width:90%;
-  max-width:300px;
+  max-width:340px;
+  padding:20px;
+  border-radius:16px;
+  box-shadow:0 0 25px #a855f7;
+  backdrop-filter:blur(10px);
 }
 
-input{
-  width:70%;
+h2{
+  text-align:center;
+  color:#a855f7;
+}
+
+.inputRow{
+  display:flex;
+  gap:5px;
+  margin-top:10px;
+}
+
+input, select{
   padding:10px;
+  border-radius:8px;
+  border:none;
+  flex:1;
 }
 
 button{
   padding:10px;
+  border:none;
+  border-radius:8px;
   background:#a855f7;
   color:white;
-  border:none;
-  border-radius:6px;
+  cursor:pointer;
+}
+
+ul{
+  list-style:none;
+  margin-top:15px;
+  padding:0;
 }
 
 li{
-  margin-top:10px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding:10px;
+  margin-top:8px;
+  border-radius:10px;
+  background:rgba(255,255,255,0.05);
+  animation:fadeIn 0.3s ease;
+  transition:0.2s;
+}
+
+li.done{
+  text-decoration:line-through;
+  opacity:0.5;
+}
+
+.category{
+  font-size:10px;
+  padding:3px 6px;
+  border-radius:6px;
+  background:#a855f7;
+  margin-left:5px;
+}
+
+.actions{
+  display:flex;
+  gap:8px;
+}
+
+.check{
   cursor:pointer;
 }
+
+.delete{
+  cursor:pointer;
+  color:red;
+}
+
+@keyframes fadeIn{
+  from{opacity:0; transform:translateY(10px);}
+  to{opacity:1; transform:translateY(0);}
+}
+
 </style>
 </head>
 
@@ -49,8 +110,17 @@ li{
 
 <div class="box">
   <h2>To-Do</h2>
-  <input id="task" placeholder="Add task">
-  <button onclick="add()">Add</button>
+
+  <div class="inputRow">
+    <input id="task" placeholder="Add task">
+    <select id="cat">
+      <option>School</option>
+      <option>Work</option>
+      <option>Personal</option>
+      <option>Other</option>
+    </select>
+    <button onclick="add()">+</button>
+  </div>
 
   <ul id="list"></ul>
 </div>
@@ -60,39 +130,64 @@ const list = document.getElementById("list");
 
 function load(){
   list.innerHTML="";
-  JSON.parse(localStorage.getItem("tasks")||"[]")
-  .forEach((t,i)=>{
+  const tasks = JSON.parse(localStorage.getItem("tasks")||"[]");
+
+  tasks.forEach((t,i)=>{
     const li=document.createElement("li");
-    li.textContent=t;
-    li.onclick=()=>remove(i);
+    if(t.done) li.classList.add("done");
+
+    li.innerHTML = `
+      <span>
+        ${t.text}
+        <span class="category">${t.cat}</span>
+      </span>
+
+      <div class="actions">
+        <span class="check">✔️</span>
+        <span class="delete">🗑</span>
+      </div>
+    `;
+
+    li.querySelector(".check").onclick=()=>{
+      t.done = !t.done;
+      save(tasks);
+    };
+
+    li.querySelector(".delete").onclick=()=>{
+      tasks.splice(i,1);
+      save(tasks);
+    };
+
     list.appendChild(li);
   });
 }
 
 function add(){
-  const val=document.getElementById("task").value;
-  if(!val) return;
+  const text=document.getElementById("task").value;
+  const cat=document.getElementById("cat").value;
+
+  if(!text) return;
+
   const tasks=JSON.parse(localStorage.getItem("tasks")||"[]");
-  tasks.push(val);
-  localStorage.setItem("tasks",JSON.stringify(tasks));
+
+  tasks.push({
+    text:text,
+    cat:cat,
+    done:false
+  });
+
+  save(tasks);
   document.getElementById("task").value="";
-  load();
 }
 
-function remove(i){
-  const tasks=JSON.parse(localStorage.getItem("tasks"));
-  tasks.splice(i,1);
+function save(tasks){
   localStorage.setItem("tasks",JSON.stringify(tasks));
   load();
 }
 
 /* THEME SYNC */
-function applyTheme(){
-  const theme = localStorage.getItem("theme") || "dark";
-  document.body.className = theme;
-}
+document.body.className = localStorage.getItem("theme") || "dark";
 
-applyTheme();
 load();
 </script>
 
