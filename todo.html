@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>To-Do App</title>
+
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(135deg, #000000, #4c1d95);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    .app {
+      width: 350px;
+      background: rgba(0,0,0,0.4);
+      backdrop-filter: blur(10px);
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 20px #a855f7;
+    }
+
+    h1 {
+      text-align: center;
+      color: #a855f7;
+      text-shadow: 0 0 10px #a855f7;
+    }
+
+    .input-box {
+      display: flex;
+      margin-top: 20px;
+    }
+
+    input {
+      flex: 1;
+      padding: 10px;
+      border: none;
+      border-radius: 6px;
+      outline: none;
+    }
+
+    button {
+      padding: 10px;
+      border: none;
+      margin-left: 5px;
+      background: #a855f7;
+      color: white;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #9333ea;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 20px;
+    }
+
+    li {
+      background: rgba(255,255,255,0.1);
+      padding: 10px;
+      border-radius: 6px;
+      margin: 8px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    li span {
+      cursor: pointer;
+    }
+
+    .done {
+      text-decoration: line-through;
+      opacity: 0.6;
+    }
+
+    .delete {
+      color: red;
+      cursor: pointer;
+    }
+
+  </style>
+</head>
+
+<body>
+
+  <div class="app">
+    <h1>To-Do</h1>
+
+    <div class="input-box">
+      <input id="input" placeholder="Add a task...">
+      <button onclick="addTask()">Add</button>
+    </div>
+
+    <ul id="list"></ul>
+  </div>
+
+  <script>
+    const input = document.getElementById("input");
+    const list = document.getElementById("list");
+
+    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+
+    function render() {
+      list.innerHTML = "";
+      tasks.forEach((task, index) => {
+        const li = document.createElement("li");
+
+        const text = document.createElement("span");
+        text.textContent = task.text;
+        if (task.done) text.classList.add("done");
+
+        text.onclick = () => {
+          tasks[index].done = !tasks[index].done;
+          save();
+        };
+
+        const del = document.createElement("span");
+        del.textContent = "✕";
+        del.className = "delete";
+        del.onclick = () => {
+          tasks.splice(index, 1);
+          save();
+        };
+
+        li.appendChild(text);
+        li.appendChild(del);
+        list.appendChild(li);
+      });
+    }
+
+    function addTask() {
+      if (input.value.trim() === "") return;
+
+      tasks.push({ text: input.value, done: false });
+      input.value = "";
+      save();
+    }
+
+    function save() {
+      localStorage.setItem("tasks", JSON.stringify(tasks));
+      render();
+    }
+
+    render();
+  </script>
+
+</body>
+</html>
