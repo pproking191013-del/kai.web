@@ -12,7 +12,7 @@
     body {
       font-family: Arial, sans-serif;
       overflow: hidden;
-      transition: background 0.5s ease, color 0.5s ease;
+      transition: 0.5s;
     }
 
     body.dark { background:#000; color:white; }
@@ -33,275 +33,165 @@
 
     .navbar a {
       cursor:pointer;
-      text-decoration:none;
       padding:10px 14px;
-      border-radius:8px;
     }
 
     body.dark .navbar { background:rgba(0,0,0,0.4); }
     body.light .navbar { background:rgba(255,255,255,0.6); }
 
-    body.dark .navbar a { color:white; }
-    body.light .navbar a { color:black; }
-
-    .toggle { cursor:pointer; font-size:22px; padding:10px; }
+    h1 { font-size:50px; color:#a855f7; }
 
     .section {
-      position: absolute;
-      top: 0;
-      left: 100%;
-      width: 100%;
-      height: 100vh;
-
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-
-      transition: left 0.6s ease;
-      text-align:center;
-      padding:20px;
-    }
-
-    .section.active { left: 0; }
-
-    body.dark #about { background: linear-gradient(270deg,#000,#4c1d95,#000); }
-    body.dark #projects { background: linear-gradient(270deg,#020617,#1e3a8a,#020617); }
-    body.dark #socials { background: linear-gradient(270deg,#000,#312e81,#000); }
-    body.dark #game { background: linear-gradient(270deg,#000,#581c87,#000); }
-
-    body.light #about { background: linear-gradient(270deg,#fff,#e9d5ff,#fff); }
-    body.light #projects { background: linear-gradient(270deg,#fff,#dbeafe,#fff); }
-    body.light #socials { background: linear-gradient(270deg,#fff,#ddd6fe,#fff); }
-    body.light #game { background: linear-gradient(270deg,#fff,#f3e8ff,#fff); }
-
-    h1 {
-      font-size: 50px;
-      color: #a855f7;
-      text-shadow: 0 0 20px #a855f7;
-    }
-
-    p { margin-top:10px; opacity:0.8; }
-
-    .project {
-      margin-top:20px;
-      padding:20px;
-      border-radius:12px;
-      background: rgba(255,255,255,0.05);
-      width:300px;
-      max-width:90%;
-    }
-
-    iframe {
-      margin-top:10px;
+      position:absolute;
       width:100%;
+      height:100vh;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      left:100%;
+      transition:0.5s;
+    }
+
+    .section.active { left:0; }
+
+    /* GAME */
+    #reactionBox {
+      width:200px;
       height:200px;
-      border:none;
-      border-radius:10px;
+      background:#333;
+      border-radius:15px;
+      margin-top:20px;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      cursor:pointer;
       box-shadow:0 0 20px #a855f7;
     }
 
-    .socials a {
-      margin:10px;
-      font-size:26px;
-      padding:12px;
-      display:inline-block;
+    #reactionBox.active {
+      background:#a855f7;
     }
 
-    /* GAME */
-    #gameArea {
-      position: relative;
-      width: 90%;
-      max-width: 400px;
-      height: 300px;
-      border: 2px solid #a855f7;
-      margin-top: 20px;
-      overflow: hidden;
+    .stats {
+      margin-top:15px;
+      font-size:18px;
     }
 
-    #target {
-      width: 50px;
-      height: 50px;
-      background: #a855f7;
-      position: absolute;
-      border-radius: 10px;
-      box-shadow: 0 0 20px #a855f7;
-      cursor: pointer;
+    button {
+      margin-top:10px;
+      padding:10px 20px;
+      border:none;
+      border-radius:8px;
+      background:#a855f7;
+      color:white;
+      cursor:pointer;
     }
-
-    .score {
-      margin-top: 10px;
-      font-size: 18px;
-    }
-
-    #gameOverText {
-      margin-top: 15px;
-      font-size: 20px;
-    }
-
-    #restartBtn {
-      margin-top: 10px;
-      padding: 10px 20px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      background: #a855f7;
-      color: white;
-      display: none;
-    }
-
-    @media (max-width: 768px) {
-      h1 { font-size: 35px; }
-      iframe { height: 180px; }
-    }
-
   </style>
 </head>
 
 <body>
 
-  <div class="navbar">
-    <div class="nav-links">
-      <a onclick="showSection('about')">About</a>
-      <a onclick="showSection('projects')">Projects</a>
-      <a onclick="showSection('game')">Game</a>
-      <a onclick="showSection('socials')">Socials</a>
-    </div>
-    <span class="toggle" onclick="toggleTheme()">🌙</span>
+<div class="navbar">
+  <div class="nav-links">
+    <a onclick="showSection('about')">About</a>
+    <a onclick="showSection('game')">Game</a>
+  </div>
+  <span onclick="toggleTheme()">🌙</span>
+</div>
+
+<div class="section active" id="about">
+  <h1>kaiweb</h1>
+  <p>reaction game below</p>
+</div>
+
+<div class="section" id="game">
+  <h1>reaction test</h1>
+
+  <div id="reactionBox">wait...</div>
+
+  <div class="stats">
+    Time: <span id="time">0</span> ms <br>
+    Best: <span id="best">--</span> ms
   </div>
 
-  <div class="section active" id="about">
-    <h1 id="typing"></h1>
-    <p>clean. simple. mine.</p>
-  </div>
+  <button onclick="startGame()">Start</button>
+</div>
 
-  <div class="section" id="projects">
-    <h1>projects</h1>
-    <div class="project">
-      <h2>To-Do App</h2>
-      <iframe src="todo.html"></iframe>
-    </div>
-  </div>
+<script>
+function showSection(id){
+  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+}
 
-  <div class="section" id="game">
-    <h1>click game</h1>
-    <p>tap the box fast</p>
+function toggleTheme(){
+  document.body.classList.toggle("dark");
+  document.body.classList.toggle("light");
+}
 
-    <div id="gameArea">
-      <div id="target"></div>
-    </div>
+/* GAME LOGIC */
+const box = document.getElementById("reactionBox");
+const timeEl = document.getElementById("time");
+const bestEl = document.getElementById("best");
 
-    <div class="score">
-      Score: <span id="score">0</span> |
-      Time: <span id="time">10</span>
-    </div>
+let startTime = 0;
+let timeout;
+let ready = false;
 
-    <div id="gameOverText"></div>
-    <button id="restartBtn">Restart</button>
-  </div>
+/* load best */
+let best = localStorage.getItem("bestTime");
+if(best) bestEl.textContent = best;
 
-  <div class="section" id="socials">
-    <h1>socials</h1>
-    <div class="socials">
-      <a href="https://instagram.com/pro191013" target="_blank"><i class="fab fa-instagram"></i></a>
-      <a href="https://snapchat.com/add/pro_king699" target="_blank"><i class="fab fa-snapchat"></i></a>
-      <a href="https://www.tiktok.com/@pro_king690" target="_blank"><i class="fab fa-tiktok"></i></a>
-      <a href="https://wa.me/447349901324" target="_blank"><i class="fab fa-whatsapp"></i></a>
-    </div>
-  </div>
+function playSound(freq){
+  const ctx = new AudioContext();
+  const osc = ctx.createOscillator();
+  osc.frequency.value = freq;
+  osc.connect(ctx.destination);
+  osc.start();
+  osc.stop(ctx.currentTime + 0.1);
+}
 
-  <script>
-    function showSection(id) {
-      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-      document.getElementById(id).classList.add('active');
+function startGame(){
+  box.classList.remove("active");
+  box.textContent = "wait...";
+  ready = false;
 
-      if (id === "game") startGame();
-    }
+  clearTimeout(timeout);
 
-    function setTheme(theme) {
-      document.body.className = theme;
-      document.querySelector('.toggle').textContent = theme === 'dark' ? '🌙' : '☀️';
-      localStorage.setItem('theme', theme);
-    }
+  timeout = setTimeout(()=>{
+    box.classList.add("active");
+    box.textContent = "CLICK!";
+    startTime = Date.now();
+    ready = true;
 
-    function toggleTheme() {
-      const current = document.body.classList.contains('dark') ? 'dark' : 'light';
-      setTheme(current === 'dark' ? 'light' : 'dark');
-    }
+    playSound(800); // ready sound
 
-    const saved = localStorage.getItem('theme');
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    setTheme(saved || (prefersDark ? 'dark' : 'light'));
+  }, Math.random()*2000 + 1000);
+}
 
-    // typing
-    const text = "kaiweb";
-    let i = 0;
-    function type() {
-      if (i < text.length) {
-        document.getElementById("typing").innerHTML += text[i];
-        i++;
-        setTimeout(type, 120);
-      }
-    }
-    type();
+box.onclick = ()=>{
+  if(!ready){
+    box.textContent = "too early 💀";
+    playSound(200);
+    return;
+  }
 
-    // GAME
-    let score = 0;
-    let time = 10;
-    let gameActive = false;
-    let timer;
+  const reaction = Date.now() - startTime;
+  timeEl.textContent = reaction;
 
-    const target = document.getElementById("target");
-    const scoreEl = document.getElementById("score");
-    const timeEl = document.getElementById("time");
-    const gameOverText = document.getElementById("gameOverText");
-    const restartBtn = document.getElementById("restartBtn");
-    const gameArea = document.getElementById("gameArea");
+  playSound(1200);
 
-    function moveTarget() {
-      const maxX = gameArea.clientWidth - 50;
-      const maxY = gameArea.clientHeight - 50;
+  if(!best || reaction < best){
+    best = reaction;
+    localStorage.setItem("bestTime", best);
+    bestEl.textContent = best;
+  }
 
-      target.style.left = Math.random() * maxX + "px";
-      target.style.top = Math.random() * maxY + "px";
-    }
-
-    target.onclick = () => {
-      if (!gameActive) return;
-      score++;
-      scoreEl.textContent = score;
-      moveTarget();
-    };
-
-    function startGame() {
-      score = 0;
-      time = 10;
-      gameActive = true;
-
-      scoreEl.textContent = score;
-      timeEl.textContent = time;
-      gameOverText.textContent = "";
-      restartBtn.style.display = "none";
-
-      moveTarget();
-
-      clearInterval(timer);
-      timer = setInterval(() => {
-        time--;
-        timeEl.textContent = time;
-
-        if (time <= 0) {
-          clearInterval(timer);
-          gameActive = false;
-
-          gameOverText.textContent = "Game Over! Score: " + score;
-          restartBtn.style.display = "inline-block";
-        }
-      }, 1000);
-    }
-
-    restartBtn.onclick = startGame;
-  </script>
+  box.classList.remove("active");
+  box.textContent = "again?";
+  ready = false;
+};
+</script>
 
 </body>
 </html>
