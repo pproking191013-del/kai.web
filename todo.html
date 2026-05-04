@@ -1,189 +1,100 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>To-Do App</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{
+  font-family:Arial;
+  margin:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  height:100vh;
+  transition:0.3s;
+}
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+body.dark{background:#000;color:white;}
+body.light{background:#fff;color:black;}
 
-    body {
-      font-family: Arial, sans-serif;
-      background: linear-gradient(135deg, #000000, #4c1d95);
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-    }
+.box{
+  padding:20px;
+  border-radius:12px;
+  box-shadow:0 0 20px #a855f7;
+  width:90%;
+  max-width:300px;
+}
 
-    /* NAVBAR */
-    .navbar {
-      position: fixed;
-      top: 0;
-      width: 100%;
-      padding: 15px 20px;
-      background: rgba(0,0,0,0.4);
-      backdrop-filter: blur(10px);
-    }
+input{
+  width:70%;
+  padding:10px;
+}
 
-    .navbar a {
-      color: white;
-      text-decoration: none;
-      font-size: 18px;
-    }
+button{
+  padding:10px;
+  background:#a855f7;
+  color:white;
+  border:none;
+  border-radius:6px;
+}
 
-    /* APP */
-    .app {
-      width: 350px;
-      background: rgba(0,0,0,0.4);
-      backdrop-filter: blur(10px);
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 0 20px #a855f7;
-    }
-
-    h1 {
-      text-align: center;
-      color: #a855f7;
-      text-shadow: 0 0 10px #a855f7;
-    }
-
-    .input-box {
-      display: flex;
-      margin-top: 20px;
-    }
-
-    input {
-      flex: 1;
-      padding: 10px;
-      border: none;
-      border-radius: 6px;
-      outline: none;
-    }
-
-    button {
-      padding: 10px;
-      margin-left: 5px;
-      border: none;
-      background: #a855f7;
-      color: white;
-      border-radius: 6px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background: #9333ea;
-    }
-
-    ul {
-      list-style: none;
-      margin-top: 20px;
-    }
-
-    li {
-      background: rgba(255,255,255,0.1);
-      padding: 10px;
-      border-radius: 6px;
-      margin: 8px 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    li span {
-      cursor: pointer;
-    }
-
-    .done {
-      text-decoration: line-through;
-      opacity: 0.6;
-    }
-
-    .delete {
-      color: red;
-      font-weight: bold;
-    }
-
-  </style>
+li{
+  margin-top:10px;
+  cursor:pointer;
+}
+</style>
 </head>
 
 <body>
 
-  <!-- NAVBAR -->
-  <div class="navbar">
-    <a href="index.html">← back</a>
-  </div>
+<div class="box">
+  <h2>To-Do</h2>
+  <input id="task" placeholder="Add task">
+  <button onclick="add()">Add</button>
 
-  <!-- APP -->
-  <div class="app">
-    <h1>To-Do</h1>
+  <ul id="list"></ul>
+</div>
 
-    <div class="input-box">
-      <input id="input" placeholder="Add a task..." onkeypress="handleKey(event)">
-      <button onclick="addTask()">Add</button>
-    </div>
+<script>
+const list = document.getElementById("list");
 
-    <ul id="list"></ul>
-  </div>
+function load(){
+  list.innerHTML="";
+  JSON.parse(localStorage.getItem("tasks")||"[]")
+  .forEach((t,i)=>{
+    const li=document.createElement("li");
+    li.textContent=t;
+    li.onclick=()=>remove(i);
+    list.appendChild(li);
+  });
+}
 
-  <script>
-    const input = document.getElementById("input");
-    const list = document.getElementById("list");
+function add(){
+  const val=document.getElementById("task").value;
+  if(!val) return;
+  const tasks=JSON.parse(localStorage.getItem("tasks")||"[]");
+  tasks.push(val);
+  localStorage.setItem("tasks",JSON.stringify(tasks));
+  document.getElementById("task").value="";
+  load();
+}
 
-    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+function remove(i){
+  const tasks=JSON.parse(localStorage.getItem("tasks"));
+  tasks.splice(i,1);
+  localStorage.setItem("tasks",JSON.stringify(tasks));
+  load();
+}
 
-    function render() {
-      list.innerHTML = "";
+/* THEME SYNC */
+function applyTheme(){
+  const theme = localStorage.getItem("theme") || "dark";
+  document.body.className = theme;
+}
 
-      tasks.forEach((task, index) => {
-        const li = document.createElement("li");
-
-        const text = document.createElement("span");
-        text.textContent = task.text;
-        if (task.done) text.classList.add("done");
-
-        text.onclick = () => {
-          tasks[index].done = !tasks[index].done;
-          save();
-        };
-
-        const del = document.createElement("span");
-        del.textContent = "✕";
-        del.className = "delete";
-        del.onclick = () => {
-          tasks.splice(index, 1);
-          save();
-        };
-
-        li.appendChild(text);
-        li.appendChild(del);
-        list.appendChild(li);
-      });
-    }
-
-    function addTask() {
-      if (input.value.trim() === "") return;
-
-      tasks.push({ text: input.value, done: false });
-      input.value = "";
-      save();
-    }
-
-    function handleKey(e) {
-      if (e.key === "Enter") addTask();
-    }
-
-    function save() {
-      localStorage.setItem("tasks", JSON.stringify(tasks));
-      render();
-    }
-
-    render();
-  </script>
+applyTheme();
+load();
+</script>
 
 </body>
 </html>
