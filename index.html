@@ -2,7 +2,6 @@
 <html>
 <head>
   <title>KaiWeb</title>
-
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
@@ -19,7 +18,6 @@
     body.dark { background:#000; color:white; }
     body.light { background:#fff; color:black; }
 
-    /* NAV */
     .navbar {
       position: fixed;
       top: 0;
@@ -31,15 +29,12 @@
       z-index: 1000;
     }
 
-    .nav-links {
-      display:flex;
-      gap:30px;
-    }
+    .nav-links { display:flex; gap:20px; }
 
     .navbar a {
       cursor:pointer;
       text-decoration:none;
-      padding:8px 12px; /* bigger tap area */
+      padding:10px 14px;
       border-radius:8px;
     }
 
@@ -49,13 +44,8 @@
     body.dark .navbar a { color:white; }
     body.light .navbar a { color:black; }
 
-    .toggle {
-      cursor:pointer;
-      font-size:22px;
-      padding:8px; /* bigger tap */
-    }
+    .toggle { cursor:pointer; font-size:22px; padding:10px; }
 
-    /* SECTIONS */
     .section {
       position: absolute;
       top: 0;
@@ -68,32 +58,25 @@
       justify-content: center;
       align-items: center;
 
-      transition: left 0.6s cubic-bezier(0.77,0,0.175,1);
-      background-size: 400% 400%;
-      animation: gradientMove 15s ease infinite;
+      transition: left 0.6s ease;
       text-align:center;
       padding:20px;
     }
 
     .section.active { left: 0; }
 
-    @keyframes gradientMove {
-      0% { background-position:0% 50%; }
-      50% { background-position:100% 50%; }
-      100% { background-position:0% 50%; }
-    }
-
-    /* BG */
     body.dark #about { background: linear-gradient(270deg,#000,#4c1d95,#000); }
     body.dark #projects { background: linear-gradient(270deg,#020617,#1e3a8a,#020617); }
     body.dark #socials { background: linear-gradient(270deg,#000,#312e81,#000); }
+    body.dark #game { background: linear-gradient(270deg,#000,#581c87,#000); }
 
     body.light #about { background: linear-gradient(270deg,#fff,#e9d5ff,#fff); }
     body.light #projects { background: linear-gradient(270deg,#fff,#dbeafe,#fff); }
     body.light #socials { background: linear-gradient(270deg,#fff,#ddd6fe,#fff); }
+    body.light #game { background: linear-gradient(270deg,#fff,#f3e8ff,#fff); }
 
     h1 {
-      font-size: 60px;
+      font-size: 50px;
       color: #a855f7;
       text-shadow: 0 0 20px #a855f7;
     }
@@ -101,7 +84,7 @@
     p { margin-top:10px; opacity:0.8; }
 
     .project {
-      margin-top:30px;
+      margin-top:20px;
       padding:20px;
       border-radius:12px;
       background: rgba(255,255,255,0.05);
@@ -112,63 +95,48 @@
     iframe {
       margin-top:10px;
       width:100%;
-      height:250px;
+      height:200px;
       border:none;
       border-radius:10px;
       box-shadow:0 0 20px #a855f7;
     }
 
     .socials a {
-      margin:15px;
-      font-size:30px;
-      color:inherit;
+      margin:10px;
+      font-size:26px;
+      padding:12px;
       display:inline-block;
-      padding:10px; /* easier tapping */
     }
 
-    .socials a:hover {
-      color:#a855f7;
-      transform:scale(1.2);
+    /* GAME */
+    #gameArea {
+      position: relative;
+      width: 90%;
+      max-width: 400px;
+      height: 300px;
+      border: 2px solid #a855f7;
+      margin-top: 20px;
+      overflow: hidden;
     }
 
-    /* 📱 MOBILE FIXES */
+    #target {
+      width: 50px;
+      height: 50px;
+      background: #a855f7;
+      position: absolute;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #a855f7;
+      cursor: pointer;
+    }
+
+    .score {
+      margin-top: 10px;
+      font-size: 18px;
+    }
+
     @media (max-width: 768px) {
-
-      h1 {
-        font-size: 40px;
-      }
-
-      .nav-links {
-        gap: 10px;
-      }
-
-      .navbar {
-        padding: 10px 15px;
-      }
-
-      .navbar a {
-        font-size: 14px;
-        padding: 10px 14px; /* BIG tap targets */
-      }
-
-      .toggle {
-        font-size: 20px;
-        padding: 10px;
-      }
-
-      .project {
-        width: 100%;
-      }
-
-      iframe {
-        height: 200px;
-      }
-
-      .socials a {
-        font-size: 26px;
-        margin:10px;
-        padding:12px;
-      }
+      h1 { font-size: 35px; }
+      iframe { height: 180px; }
     }
 
   </style>
@@ -180,6 +148,7 @@
     <div class="nav-links">
       <a onclick="showSection('about')">About</a>
       <a onclick="showSection('projects')">Projects</a>
+      <a onclick="showSection('game')">Game</a>
       <a onclick="showSection('socials')">Socials</a>
     </div>
     <span class="toggle" onclick="toggleTheme()">🌙</span>
@@ -198,6 +167,21 @@
     </div>
   </div>
 
+  <!-- GAME -->
+  <div class="section" id="game">
+    <h1>click game</h1>
+    <p>tap the box fast</p>
+
+    <div id="gameArea">
+      <div id="target"></div>
+    </div>
+
+    <div class="score">
+      Score: <span id="score">0</span> |
+      Time: <span id="time">10</span>
+    </div>
+  </div>
+
   <div class="section" id="socials">
     <h1>socials</h1>
     <div class="socials">
@@ -210,22 +194,8 @@
 
   <script>
     function showSection(id) {
-      const current = document.querySelector('.section.active');
-      const next = document.getElementById(id);
-      if (current === next) return;
-
-      next.style.left = "100%";
-      next.classList.add("active");
-
-      setTimeout(() => {
-        next.style.left = "0";
-        current.style.left = "-100%";
-      }, 10);
-
-      setTimeout(() => {
-        current.classList.remove("active");
-        current.style.left = "100%";
-      }, 600);
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
     }
 
     function setTheme(theme) {
@@ -254,6 +224,47 @@
       }
     }
     type();
+
+    // GAME LOGIC
+    let score = 0;
+    let time = 10;
+    const target = document.getElementById("target");
+    const scoreEl = document.getElementById("score");
+    const timeEl = document.getElementById("time");
+
+    function moveTarget() {
+      const x = Math.random() * 300;
+      const y = Math.random() * 200;
+      target.style.left = x + "px";
+      target.style.top = y + "px";
+    }
+
+    target.onclick = () => {
+      score++;
+      scoreEl.textContent = score;
+      moveTarget();
+    };
+
+    function startGame() {
+      score = 0;
+      time = 10;
+      scoreEl.textContent = score;
+      timeEl.textContent = time;
+      moveTarget();
+
+      const timer = setInterval(() => {
+        time--;
+        timeEl.textContent = time;
+
+        if (time <= 0) {
+          clearInterval(timer);
+          alert("Game Over! Score: " + score);
+        }
+      }, 1000);
+    }
+
+    // auto start when opening game tab
+    document.querySelector('[onclick="showSection(\'game\')"]').addEventListener("click", startGame);
   </script>
 
 </body>
