@@ -1,71 +1,20 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-body{
-  margin:0;
-  font-family:Arial;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  height:100vh;
-  background:#111;
-  color:white;
-}
-
-/* FIXED BOX */
-#box{
-  width:120px;
-  height:120px;
-  background:red;
-  border-radius:10px;
-  margin:20px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  cursor:pointer;
-  transition:0.2s;
-}
-
-#box.active{
-  background:lime;
-}
-
-#box:active{
-  transform:scale(0.95);
-}
-
-</style>
-</head>
-
-<body>
-
-<h2>Reaction Game</h2>
-
-<div id="box"></div>
-<p id="result">wait...</p>
-
-<script>
 const box = document.getElementById("box");
 const result = document.getElementById("result");
 
 let start = 0;
 let ready = false;
 
-/* FORCE VISIBLE (fix iframe bug) */
-box.style.width = "120px";
-box.style.height = "120px";
-
-/* START GAME */
 function startGame(){
   ready = false;
+
   box.classList.remove("active");
+  box.style.background = "#ff3b3b"; // RED = wait
   result.textContent = "wait...";
 
   setTimeout(()=>{
     box.classList.add("active");
+    box.style.background = "#22c55e"; // GREEN = click
+    result.textContent = "CLICK!";
     start = Date.now();
     ready = true;
   }, Math.random()*2000 + 1000);
@@ -73,7 +22,7 @@ function startGame(){
 
 box.onclick = ()=>{
   if(!ready){
-    result.textContent = "too early";
+    result.textContent = "too early 💀";
     return;
   }
 
@@ -84,7 +33,3 @@ box.onclick = ()=>{
 };
 
 startGame();
-</script>
-
-</body>
-</html>
