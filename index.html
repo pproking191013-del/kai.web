@@ -3,15 +3,10 @@
 <head>
   <title>KaiWeb</title>
 
-  <!-- ICONS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin:0; padding:0; box-sizing:border-box; }
 
     body {
       font-family: Arial, sans-serif;
@@ -19,79 +14,38 @@
       transition: background 0.5s ease, color 0.5s ease;
     }
 
-    /* BASE BG (prevents white flash) */
-    body.dark {
-      background: #000;
-      color: white;
-    }
+    body.dark { background:#000; color:white; }
+    body.light { background:#fff; color:black; }
 
-    body.light {
-      background: #fff;
-      color: black;
-    }
-
-    /* NAVBAR */
+    /* NAV */
     .navbar {
       position: fixed;
       top: 0;
       width: 100%;
       display: flex;
       justify-content: space-between;
-      align-items: center;
       padding: 15px 30px;
       backdrop-filter: blur(10px);
       z-index: 1000;
-      transition: background 0.5s ease;
     }
 
-    .nav-links {
-      display: flex;
-      gap: 30px;
-    }
+    .nav-links { display:flex; gap:30px; }
 
-    .navbar a {
-      text-decoration: none;
-      cursor: pointer;
-      transition: 0.3s;
-    }
+    .navbar a { cursor:pointer; text-decoration:none; }
 
-    .toggle {
-      font-size: 22px;
-      cursor: pointer;
-    }
+    body.dark .navbar { background:rgba(0,0,0,0.4); }
+    body.light .navbar { background:rgba(255,255,255,0.6); }
 
-    /* DARK NAV */
-    body.dark .navbar {
-      background: rgba(0,0,0,0.4);
-    }
+    body.dark .navbar a { color:white; }
+    body.light .navbar a { color:black; }
 
-    body.dark .navbar a {
-      color: white;
-    }
+    .toggle { cursor:pointer; font-size:22px; }
 
-    body.dark .navbar a:hover {
-      color: #a855f7;
-    }
-
-    /* LIGHT NAV */
-    body.light .navbar {
-      background: rgba(255,255,255,0.6);
-    }
-
-    body.light .navbar a {
-      color: black;
-    }
-
-    body.light .navbar a:hover {
-      color: #7c3aed;
-    }
-
-    /* SECTIONS (SLIDE SYSTEM) */
+    /* SECTIONS (FIXED SLIDE) */
     .section {
       position: absolute;
       top: 0;
       left: 100%;
-
       width: 100%;
       height: 100vh;
 
@@ -100,100 +54,68 @@
       justify-content: center;
       align-items: center;
 
-      transition: all 0.6s cubic-bezier(0.77, 0, 0.175, 1);
-
+      transition: left 0.6s cubic-bezier(0.77,0,0.175,1);
       background-size: 400% 400%;
       animation: gradientMove 15s ease infinite;
 
-      z-index: 0;
+      will-change: transform;
     }
 
-    .section.active {
-      left: 0;
-      z-index: 2;
-    }
-
-    .section.exit-left {
-      left: -100%;
-    }
-
-    .section.enter-right {
-      left: 100%;
-    }
+    .section.active { left: 0; z-index: 2; }
+    .section.exit-left { left: -100%; }
 
     @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
+      0% { background-position:0% 50%; }
+      50% { background-position:100% 50%; }
+      100% { background-position:0% 50%; }
     }
 
-    /* BACKGROUNDS */
-    body.dark #about {
-      background: linear-gradient(270deg, #000000, #4c1d95, #000000);
-    }
+    /* BG */
+    body.dark #about { background: linear-gradient(270deg,#000,#4c1d95,#000); }
+    body.dark #projects { background: linear-gradient(270deg,#020617,#1e3a8a,#020617); }
+    body.dark #socials { background: linear-gradient(270deg,#000,#312e81,#000); }
 
-    body.dark #projects {
-      background: linear-gradient(270deg, #020617, #1e3a8a, #020617);
-    }
+    body.light #about { background: linear-gradient(270deg,#fff,#e9d5ff,#fff); }
+    body.light #projects { background: linear-gradient(270deg,#fff,#dbeafe,#fff); }
+    body.light #socials { background: linear-gradient(270deg,#fff,#ddd6fe,#fff); }
 
-    body.dark #contact {
-      background: linear-gradient(270deg, #000000, #312e81, #000000);
-    }
-
-    body.light #about {
-      background: linear-gradient(270deg, #ffffff, #e9d5ff, #ffffff);
-    }
-
-    body.light #projects {
-      background: linear-gradient(270deg, #ffffff, #dbeafe, #ffffff);
-    }
-
-    body.light #contact {
-      background: linear-gradient(270deg, #ffffff, #ddd6fe, #ffffff);
-    }
-
-    /* TEXT */
     h1 {
       font-size: 70px;
       color: #a855f7;
       text-shadow: 0 0 20px #a855f7;
     }
 
-    p {
-      margin-top: 10px;
-      opacity: 0.8;
-    }
+    p { margin-top:10px; opacity:0.8; }
 
-    /* PROJECT CARD */
+    /* PROJECT */
     .project {
-      margin-top: 30px;
-      padding: 20px;
-      border-radius: 12px;
+      margin-top:30px;
+      padding:20px;
+      border-radius:12px;
       background: rgba(255,255,255,0.05);
-      backdrop-filter: blur(10px);
-      width: 300px;
+      width:300px;
     }
 
     iframe {
-      margin-top: 10px;
-      width: 100%;
-      height: 250px;
-      border: none;
-      border-radius: 10px;
-      box-shadow: 0 0 20px #a855f7;
+      margin-top:10px;
+      width:100%;
+      height:250px;
+      border:none;
+      border-radius:10px;
+      box-shadow:0 0 20px #a855f7;
     }
 
     /* SOCIALS */
     .socials a {
-      margin: 15px;
-      font-size: 30px;
-      color: inherit;
-      transition: 0.3s;
+      margin:15px;
+      font-size:30px;
+      color:inherit;
+      transition:0.3s;
     }
 
     .socials a:hover {
-      color: #a855f7;
-      transform: scale(1.2);
+      color:#a855f7;
+      transform:scale(1.2);
     }
 
   </style>
@@ -201,14 +123,12 @@
 
 <body>
 
-  <!-- NAVBAR -->
   <div class="navbar">
     <div class="nav-links">
       <a onclick="showSection('about')">About</a>
       <a onclick="showSection('projects')">Projects</a>
-      <a onclick="showSection('contact')">Contact</a>
+      <a onclick="showSection('socials')">Socials</a>
     </div>
-
     <span class="toggle" onclick="toggleTheme()">🌙</span>
   </div>
 
@@ -221,19 +141,15 @@
   <!-- PROJECTS -->
   <div class="section" id="projects">
     <h1>projects</h1>
-
     <div class="project">
       <h2>To-Do App</h2>
-      <p>live preview</p>
-
       <iframe src="todo.html"></iframe>
     </div>
   </div>
 
-  <!-- CONTACT -->
-  <div class="section" id="contact">
+  <!-- SOCIALS -->
+  <div class="section" id="socials">
     <h1>socials</h1>
-
     <div class="socials">
       <a href="https://instagram.com/pro191013" target="_blank"><i class="fab fa-instagram"></i></a>
       <a href="https://snapchat.com/add/pro_king699" target="_blank"><i class="fab fa-snapchat"></i></a>
@@ -242,7 +158,6 @@
     </div>
   </div>
 
-  <!-- JS -->
   <script>
     function showSection(id) {
       const current = document.querySelector('.section.active');
@@ -250,24 +165,23 @@
 
       if (current === next) return;
 
-      document.querySelectorAll('.section').forEach(sec => {
-        sec.classList.remove('active', 'exit-left', 'enter-right');
-      });
+      next.style.left = "100%";
+      next.classList.add("active");
 
-      next.classList.add('enter-right');
-      next.offsetHeight;
+      setTimeout(() => {
+        next.style.left = "0";
+        current.style.left = "-100%";
+      }, 10);
 
-      current.classList.add('exit-left');
-      next.classList.add('active');
+      setTimeout(() => {
+        current.classList.remove("active");
+        current.style.left = "100%";
+      }, 600);
     }
 
     function setTheme(theme) {
-      document.body.classList.remove('dark', 'light');
-      document.body.classList.add(theme);
-
-      const toggle = document.querySelector('.toggle');
-      toggle.textContent = theme === 'dark' ? '🌙' : '☀️';
-
+      document.body.className = theme;
+      document.querySelector('.toggle').textContent = theme === 'dark' ? '🌙' : '☀️';
       localStorage.setItem('theme', theme);
     }
 
@@ -276,28 +190,20 @@
       setTheme(current === 'dark' ? 'light' : 'dark');
     }
 
-    // INIT THEME
-    const savedTheme = localStorage.getItem('theme');
+    const saved = localStorage.getItem('theme');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    setTheme(saved || (prefersDark ? 'dark' : 'light'));
 
-    if (savedTheme) {
-      setTheme(savedTheme);
-    } else {
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(prefersDark ? 'dark' : 'light');
-    }
-
-    // TYPING ANIMATION
+    // typing
     const text = "kaiweb";
     let i = 0;
-
     function type() {
       if (i < text.length) {
-        document.getElementById("typing").innerHTML += text.charAt(i);
+        document.getElementById("typing").innerHTML += text[i];
         i++;
         setTimeout(type, 120);
       }
     }
-
     type();
   </script>
 
