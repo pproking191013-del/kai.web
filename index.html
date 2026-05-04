@@ -134,6 +134,22 @@
       font-size: 18px;
     }
 
+    #gameOverText {
+      margin-top: 15px;
+      font-size: 20px;
+    }
+
+    #restartBtn {
+      margin-top: 10px;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: #a855f7;
+      color: white;
+      display: none;
+    }
+
     @media (max-width: 768px) {
       h1 { font-size: 35px; }
       iframe { height: 180px; }
@@ -167,7 +183,6 @@
     </div>
   </div>
 
-  <!-- GAME -->
   <div class="section" id="game">
     <h1>click game</h1>
     <p>tap the box fast</p>
@@ -180,6 +195,9 @@
       Score: <span id="score">0</span> |
       Time: <span id="time">10</span>
     </div>
+
+    <div id="gameOverText"></div>
+    <button id="restartBtn">Restart</button>
   </div>
 
   <div class="section" id="socials">
@@ -196,6 +214,8 @@
     function showSection(id) {
       document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
       document.getElementById(id).classList.add('active');
+
+      if (id === "game") startGame();
     }
 
     function setTheme(theme) {
@@ -225,21 +245,29 @@
     }
     type();
 
-    // GAME LOGIC
+    // GAME
     let score = 0;
     let time = 10;
+    let gameActive = false;
+    let timer;
+
     const target = document.getElementById("target");
     const scoreEl = document.getElementById("score");
     const timeEl = document.getElementById("time");
+    const gameOverText = document.getElementById("gameOverText");
+    const restartBtn = document.getElementById("restartBtn");
+    const gameArea = document.getElementById("gameArea");
 
     function moveTarget() {
-      const x = Math.random() * 300;
-      const y = Math.random() * 200;
-      target.style.left = x + "px";
-      target.style.top = y + "px";
+      const maxX = gameArea.clientWidth - 50;
+      const maxY = gameArea.clientHeight - 50;
+
+      target.style.left = Math.random() * maxX + "px";
+      target.style.top = Math.random() * maxY + "px";
     }
 
     target.onclick = () => {
+      if (!gameActive) return;
       score++;
       scoreEl.textContent = score;
       moveTarget();
@@ -248,23 +276,31 @@
     function startGame() {
       score = 0;
       time = 10;
+      gameActive = true;
+
       scoreEl.textContent = score;
       timeEl.textContent = time;
+      gameOverText.textContent = "";
+      restartBtn.style.display = "none";
+
       moveTarget();
 
-      const timer = setInterval(() => {
+      clearInterval(timer);
+      timer = setInterval(() => {
         time--;
         timeEl.textContent = time;
 
         if (time <= 0) {
           clearInterval(timer);
-          alert("Game Over! Score: " + score);
+          gameActive = false;
+
+          gameOverText.textContent = "Game Over! Score: " + score;
+          restartBtn.style.display = "inline-block";
         }
       }, 1000);
     }
 
-    // auto start when opening game tab
-    document.querySelector('[onclick="showSection(\'game\')"]').addEventListener("click", startGame);
+    restartBtn.onclick = startGame;
   </script>
 
 </body>
