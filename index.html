@@ -19,6 +19,17 @@
       transition: background 0.5s ease, color 0.5s ease;
     }
 
+    /* BASE BG (prevents white flash) */
+    body.dark {
+      background: #000;
+      color: white;
+    }
+
+    body.light {
+      background: #fff;
+      color: black;
+    }
+
     /* NAVBAR */
     .navbar {
       position: fixed;
@@ -30,6 +41,7 @@
       padding: 15px 30px;
       backdrop-filter: blur(10px);
       z-index: 1000;
+      transition: background 0.5s ease;
     }
 
     .nav-links {
@@ -40,7 +52,6 @@
     .navbar a {
       text-decoration: none;
       cursor: pointer;
-      font-size: 18px;
       transition: 0.3s;
     }
 
@@ -49,7 +60,7 @@
       cursor: pointer;
     }
 
-    /* DARK */
+    /* DARK NAV */
     body.dark .navbar {
       background: rgba(0,0,0,0.4);
     }
@@ -62,7 +73,7 @@
       color: #a855f7;
     }
 
-    /* LIGHT */
+    /* LIGHT NAV */
     body.light .navbar {
       background: rgba(255,255,255,0.6);
     }
@@ -75,9 +86,12 @@
       color: #7c3aed;
     }
 
-    /* SECTIONS */
+    /* SECTIONS (SLIDE SYSTEM) */
     .section {
       position: absolute;
+      top: 0;
+      left: 100%;
+
       width: 100%;
       height: 100vh;
 
@@ -86,22 +100,25 @@
       justify-content: center;
       align-items: center;
 
-      text-align: center;
-
-      opacity: 0;
-      transform: scale(0.97);
-      pointer-events: none;
-
-      transition: opacity 0.6s ease, transform 0.6s ease;
+      transition: all 0.6s cubic-bezier(0.77, 0, 0.175, 1);
 
       background-size: 400% 400%;
       animation: gradientMove 15s ease infinite;
+
+      z-index: 0;
     }
 
-    .active {
-      opacity: 1;
-      transform: scale(1);
-      pointer-events: all;
+    .section.active {
+      left: 0;
+      z-index: 2;
+    }
+
+    .section.exit-left {
+      left: -100%;
+    }
+
+    .section.enter-right {
+      left: 100%;
     }
 
     @keyframes gradientMove {
@@ -110,7 +127,7 @@
       100% { background-position: 0% 50%; }
     }
 
-    /* DARK BG */
+    /* BACKGROUNDS */
     body.dark #about {
       background: linear-gradient(270deg, #000000, #4c1d95, #000000);
     }
@@ -119,11 +136,10 @@
       background: linear-gradient(270deg, #020617, #1e3a8a, #020617);
     }
 
-    body.dark #socials {
+    body.dark #contact {
       background: linear-gradient(270deg, #000000, #312e81, #000000);
     }
 
-    /* LIGHT BG */
     body.light #about {
       background: linear-gradient(270deg, #ffffff, #e9d5ff, #ffffff);
     }
@@ -132,7 +148,7 @@
       background: linear-gradient(270deg, #ffffff, #dbeafe, #ffffff);
     }
 
-    body.light #socials {
+    body.light #contact {
       background: linear-gradient(270deg, #ffffff, #ddd6fe, #ffffff);
     }
 
@@ -153,34 +169,24 @@
       margin-top: 30px;
       padding: 20px;
       border-radius: 12px;
-      background: rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.05);
       backdrop-filter: blur(10px);
-      width: 320px;
-      transition: 0.3s;
-    }
-
-    .project:hover {
-      transform: scale(1.05);
-      box-shadow: 0 0 20px #a855f7;
+      width: 300px;
     }
 
     iframe {
-      width: 100%;
-      height: 200px;
-      border-radius: 10px;
-      border: none;
       margin-top: 10px;
-    }
-
-    a.project-link {
-      text-decoration: none;
-      color: inherit;
+      width: 100%;
+      height: 250px;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 0 20px #a855f7;
     }
 
     /* SOCIALS */
     .socials a {
       margin: 15px;
-      font-size: 35px;
+      font-size: 30px;
       color: inherit;
       transition: 0.3s;
     }
@@ -200,7 +206,7 @@
     <div class="nav-links">
       <a onclick="showSection('about')">About</a>
       <a onclick="showSection('projects')">Projects</a>
-      <a onclick="showSection('socials')">Socials</a>
+      <a onclick="showSection('contact')">Contact</a>
     </div>
 
     <span class="toggle" onclick="toggleTheme()">🌙</span>
@@ -208,7 +214,7 @@
 
   <!-- ABOUT -->
   <div class="section active" id="about">
-    <h1>kaiweb</h1>
+    <h1 id="typing"></h1>
     <p>clean. simple. mine.</p>
   </div>
 
@@ -218,44 +224,41 @@
 
     <div class="project">
       <h2>To-Do App</h2>
-
-      <!-- LIVE PREVIEW -->
-      <iframe src="todo.html"></iframe>
-
       <p>live preview</p>
+
+      <iframe src="todo.html"></iframe>
     </div>
   </div>
 
-  <!-- SOCIALS -->
-  <div class="section" id="socials">
+  <!-- CONTACT -->
+  <div class="section" id="contact">
     <h1>socials</h1>
 
     <div class="socials">
-      <a href="https://instagram.com/pro191013" target="_blank">
-        <i class="fab fa-instagram"></i>
-      </a>
-
-      <a href="https://snapchat.com/add/pro_king699" target="_blank">
-        <i class="fab fa-snapchat"></i>
-      </a>
-
-      <a href="https://www.tiktok.com/@pro_king690" target="_blank">
-        <i class="fab fa-tiktok"></i>
-      </a>
-
-      <a href="https://wa.me/447349901324" target="_blank">
-        <i class="fab fa-whatsapp"></i>
-      </a>
+      <a href="https://instagram.com/pro191013" target="_blank"><i class="fab fa-instagram"></i></a>
+      <a href="https://snapchat.com/add/pro_king699" target="_blank"><i class="fab fa-snapchat"></i></a>
+      <a href="https://www.tiktok.com/@pro_king690" target="_blank"><i class="fab fa-tiktok"></i></a>
+      <a href="https://wa.me/447349901324" target="_blank"><i class="fab fa-whatsapp"></i></a>
     </div>
   </div>
 
   <!-- JS -->
   <script>
     function showSection(id) {
+      const current = document.querySelector('.section.active');
+      const next = document.getElementById(id);
+
+      if (current === next) return;
+
       document.querySelectorAll('.section').forEach(sec => {
-        sec.classList.remove('active');
+        sec.classList.remove('active', 'exit-left', 'enter-right');
       });
-      document.getElementById(id).classList.add('active');
+
+      next.classList.add('enter-right');
+      next.offsetHeight;
+
+      current.classList.add('exit-left');
+      next.classList.add('active');
     }
 
     function setTheme(theme) {
@@ -282,6 +285,20 @@
       const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       setTheme(prefersDark ? 'dark' : 'light');
     }
+
+    // TYPING ANIMATION
+    const text = "kaiweb";
+    let i = 0;
+
+    function type() {
+      if (i < text.length) {
+        document.getElementById("typing").innerHTML += text.charAt(i);
+        i++;
+        setTimeout(type, 120);
+      }
+    }
+
+    type();
   </script>
 
 </body>
