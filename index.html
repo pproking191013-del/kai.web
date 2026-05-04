@@ -16,7 +16,7 @@
     body {
       font-family: Arial, sans-serif;
       overflow: hidden;
-      transition: 0.3s;
+      transition: background 0.5s ease, color 0.5s ease;
     }
 
     /* NAVBAR */
@@ -30,6 +30,7 @@
       padding: 15px 30px;
       backdrop-filter: blur(10px);
       z-index: 1000;
+      transition: background 0.5s ease;
     }
 
     .nav-links {
@@ -43,29 +44,40 @@
       transition: 0.3s;
     }
 
+    .toggle {
+      font-size: 22px;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+
+    .toggle:hover {
+      transform: scale(1.2);
+    }
+
+    /* DARK NAV */
+    body.dark .navbar {
+      background: rgba(0,0,0,0.4);
+    }
+
     body.dark .navbar a {
       color: white;
+    }
+
+    body.dark .navbar a:hover {
+      color: #a855f7;
+    }
+
+    /* LIGHT NAV */
+    body.light .navbar {
+      background: rgba(255,255,255,0.6);
     }
 
     body.light .navbar a {
       color: black;
     }
 
-    .navbar a:hover {
-      color: #a855f7;
-    }
-
-    body.dark .navbar {
-      background: rgba(0,0,0,0.4);
-    }
-
-    body.light .navbar {
-      background: rgba(255,255,255,0.6);
-    }
-
-    .toggle {
-      font-size: 22px;
-      cursor: pointer;
+    body.light .navbar a:hover {
+      color: #7c3aed;
     }
 
     /* SECTIONS */
@@ -78,9 +90,11 @@
       justify-content: center;
       align-items: center;
       text-align: center;
+
       opacity: 0;
       pointer-events: none;
       transition: opacity 0.6s ease;
+
       background-size: 400% 400%;
       animation: gradientMove 15s ease infinite;
     }
@@ -90,14 +104,13 @@
       pointer-events: all;
     }
 
-    /* GRADIENT */
     @keyframes gradientMove {
       0% { background-position: 0% 50%; }
       50% { background-position: 100% 50%; }
       100% { background-position: 0% 50%; }
     }
 
-    /* DARK */
+    /* DARK BG */
     body.dark #about {
       background: linear-gradient(270deg, #000000, #4c1d95, #000000);
     }
@@ -110,7 +123,7 @@
       background: linear-gradient(270deg, #000000, #312e81, #000000);
     }
 
-    /* LIGHT */
+    /* LIGHT BG */
     body.light #about {
       background: linear-gradient(270deg, #ffffff, #e9d5ff, #ffffff);
     }
@@ -123,6 +136,7 @@
       background: linear-gradient(270deg, #ffffff, #ddd6fe, #ffffff);
     }
 
+    /* TEXT */
     h1 {
       font-size: 70px;
       color: #a855f7;
@@ -150,6 +164,11 @@
       box-shadow: 0 0 20px #a855f7;
     }
 
+    a.project-link {
+      text-decoration: none;
+      color: inherit;
+    }
+
     /* SOCIALS */
     .socials a {
       margin: 15px;
@@ -163,15 +182,10 @@
       transform: scale(1.2);
     }
 
-    a.project-link {
-      text-decoration: none;
-      color: inherit;
-    }
-
   </style>
 </head>
 
-<body class="dark">
+<body>
 
   <!-- NAVBAR -->
   <div class="navbar">
@@ -235,14 +249,30 @@
       document.getElementById(id).classList.add('active');
     }
 
-    function toggleTheme() {
-      const body = document.body;
+    function setTheme(theme) {
+      document.body.classList.remove('dark', 'light');
+      document.body.classList.add(theme);
+
       const toggle = document.querySelector('.toggle');
+      toggle.textContent = theme === 'dark' ? '🌙' : '☀️';
 
-      body.classList.toggle('light');
-      body.classList.toggle('dark');
+      localStorage.setItem('theme', theme);
+    }
 
-      toggle.textContent = body.classList.contains('dark') ? '🌙' : '☀️';
+    function toggleTheme() {
+      const current = document.body.classList.contains('dark') ? 'dark' : 'light';
+      setTheme(current === 'dark' ? 'light' : 'dark');
+    }
+
+    // INIT THEME
+    const savedTheme = localStorage.getItem('theme');
+
+    if (savedTheme) {
+      setTheme(savedTheme);
+    } else {
+      // detect system theme
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      setTheme(prefersDark ? 'dark' : 'light');
     }
   </script>
 
