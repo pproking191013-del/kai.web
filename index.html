@@ -1,114 +1,206 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>KaiWeb</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
-  <style>
-    *{margin:0;padding:0;box-sizing:border-box;}
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
 
-    body{
-      font-family:Arial;
-      overflow:hidden;
-      transition:0.5s;
-    }
+body{
+  font-family:Arial;
+  overflow:hidden;
+  transition:0.3s;
+}
 
-    body.dark{background:#000;color:white;}
-    body.light{background:#fff;color:black;}
+body.dark{background:#000;color:white;}
+body.light{background:#fff;color:black;}
 
-    .navbar{
-      position:fixed;
-      top:0;width:100%;
-      display:flex;
-      justify-content:space-between;
-      padding:15px 30px;
-      backdrop-filter:blur(10px);
-    }
+/* NAV */
+.navbar{
+  position:fixed;
+  top:0;
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  padding:15px;
+  backdrop-filter:blur(10px);
+  z-index:1000;
+}
 
-    .nav-links{display:flex;gap:20px;}
+.nav-links{
+  display:flex;
+  gap:20px;
+}
 
-    .section{
-      position:absolute;
-      width:100%;
-      height:100vh;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      left:100%;
-      transition:0.5s;
-    }
+.navbar a{
+  cursor:pointer;
+  font-size:18px;
+}
 
-    .section.active{left:0;}
+.toggle{
+  font-size:20px;
+  cursor:pointer;
+}
 
-    h1{font-size:50px;color:#a855f7;}
+/* MOBILE FIX */
+@media(max-width:600px){
+  .navbar a{
+    font-size:22px;
+    padding:8px;
+  }
+}
 
-    iframe{
-      width:300px;
-      height:260px;
-      border:none;
-      border-radius:12px;
-      margin-top:10px;
-      box-shadow:0 0 20px #a855f7;
-    }
+/* SECTIONS */
+.section{
+  position:absolute;
+  top:0;
+  left:100%;
+  width:100%;
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  transition:0.6s;
+}
 
-    .project{
-      margin-top:20px;
-      text-align:center;
-    }
-  </style>
+.section.active{left:0;}
+.section.exit{left:-100%;}
+
+/* BG */
+body.dark #about{background:linear-gradient(270deg,#000,#4c1d95,#000);}
+body.dark #projects{background:linear-gradient(270deg,#020617,#1e3a8a,#020617);}
+body.dark #socials{background:linear-gradient(270deg,#000,#312e81,#000);}
+
+body.light #about{background:linear-gradient(270deg,#fff,#e9d5ff,#fff);}
+body.light #projects{background:linear-gradient(270deg,#fff,#dbeafe,#fff);}
+body.light #socials{background:linear-gradient(270deg,#fff,#ddd6fe,#fff);}
+
+h1{
+  font-size:60px;
+  color:#a855f7;
+  text-shadow:0 0 20px #a855f7;
+}
+
+/* PROJECTS */
+.project{
+  margin-top:20px;
+  width:300px;
+}
+
+iframe{
+  width:100%;
+  height:220px;
+  border:none;
+  border-radius:10px;
+  box-shadow:0 0 15px #a855f7;
+  margin-top:10px;
+}
+
+/* SOCIALS */
+.socials a{
+  font-size:30px;
+  margin:15px;
+  color:inherit;
+}
+
+.socials a:hover{
+  color:#a855f7;
+}
+</style>
 </head>
 
 <body>
 
 <div class="navbar">
   <div class="nav-links">
-    <a onclick="showSection('about')">About</a>
-    <a onclick="showSection('projects')">Projects</a>
+    <a onclick="show('about')">About</a>
+    <a onclick="show('projects')">Projects</a>
+    <a onclick="show('socials')">Socials</a>
   </div>
-  <span onclick="toggleTheme()">🌙</span>
+  <span class="toggle" onclick="toggleTheme()">🌙</span>
 </div>
 
+<!-- ABOUT -->
 <div class="section active" id="about">
-  <h1>kaiweb</h1>
+  <h1 id="typing"></h1>
+  <p>clean. simple. mine.</p>
 </div>
 
+<!-- PROJECTS -->
 <div class="section" id="projects">
   <h1>projects</h1>
 
   <div class="project">
-    <h2>To-Do</h2>
+    <h3>To-Do</h3>
     <iframe src="todo.html"></iframe>
   </div>
 
   <div class="project">
-    <h2>Reaction Game</h2>
+    <h3>Reaction Game</h3>
     <iframe src="game.html"></iframe>
   </div>
+</div>
 
+<!-- SOCIALS -->
+<div class="section" id="socials">
+  <h1>socials</h1>
+  <div class="socials">
+    <a href="https://instagram.com/pro191013" target="_blank"><i class="fab fa-instagram"></i></a>
+    <a href="https://snapchat.com/add/pro_king699" target="_blank"><i class="fab fa-snapchat"></i></a>
+    <a href="https://www.tiktok.com/@pro_king690" target="_blank"><i class="fab fa-tiktok"></i></a>
+    <a href="https://wa.me/447349901324" target="_blank"><i class="fab fa-whatsapp"></i></a>
+  </div>
 </div>
 
 <script>
-function showSection(id){
-  document.querySelectorAll('.section').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+function show(id){
+  const current=document.querySelector(".section.active");
+  const next=document.getElementById(id);
+
+  if(current===next)return;
+
+  next.style.left="100%";
+  next.classList.add("active");
+
+  setTimeout(()=>{
+    next.style.left="0";
+    current.style.left="-100%";
+  },10);
+
+  setTimeout(()=>{
+    current.classList.remove("active");
+    current.style.left="100%";
+  },600);
 }
 
-function setTheme(theme){
-  document.body.className = theme;
-  localStorage.setItem("theme",theme);
+/* THEME */
+function setTheme(t){
+  document.body.className=t;
+  localStorage.setItem("theme",t);
+  document.querySelector(".toggle").textContent = t==="dark"?"🌙":"☀️";
 }
 
 function toggleTheme(){
-  const t = document.body.classList.contains("dark") ? "light":"dark";
-  setTheme(t);
+  const cur=document.body.classList.contains("dark")?"dark":"light";
+  setTheme(cur==="dark"?"light":"dark");
 }
 
-/* init */
-const saved = localStorage.getItem("theme");
-setTheme(saved || "dark");
+setTheme(localStorage.getItem("theme") || "dark");
+
+/* TYPING */
+const txt="kaiweb";
+let i=0;
+function type(){
+  if(i<txt.length){
+    document.getElementById("typing").innerHTML+=txt[i];
+    i++;
+    setTimeout(type,120);
+  }
+}
+type();
 </script>
 
 </body>
