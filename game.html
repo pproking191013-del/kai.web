@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body{
+  margin:0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  height:100vh;
+  font-family:Arial;
+}
+
+body.dark{background:#000;color:white;}
+body.light{background:#fff;color:black;}
+
+#box{
+  width:120px;
+  height:120px;
+  background:#333;
+  border-radius:10px;
+  margin-top:20px;
+}
+
+#box.active{background:#a855f7;}
+</style>
+</head>
+
+<body>
+
+<h3>Reaction</h3>
+<div id="box"></div>
+<p id="time">0 ms</p>
+
+<script>
+const box=document.getElementById("box");
+const timeEl=document.getElementById("time");
+
+let start,ready;
+
+/* theme */
+document.body.className = localStorage.getItem("theme") || "dark";
+
+function startGame(){
+  ready=false;
+  box.classList.remove("active");
+
+  setTimeout(()=>{
+    box.classList.add("active");
+    start=Date.now();
+    ready=true;
+  },Math.random()*2000+1000);
+}
+
+box.onclick=()=>{
+  if(!ready){
+    timeEl.textContent="too early";
+    return;
+  }
+
+  const t=Date.now()-start;
+  timeEl.textContent=t+" ms";
+
+  let best=localStorage.getItem("best")||9999;
+  if(t<best){
+    localStorage.setItem("best",t);
+  }
+
+  startGame();
+};
+
+startGame();
+</script>
+
+</body>
+</html>
