@@ -1,28 +1,23 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Kaiweb</title>
+  <title>KaiWeb</title>
 
-  <!-- Icons -->
+  <!-- ICONS -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
   <style>
-    body {
+    * {
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      scroll-behavior: smooth;
+    }
+
+    body {
       font-family: Arial, sans-serif;
       overflow: hidden;
       transition: 0.3s;
-    }
-
-    /* THEMES */
-    body.dark {
-      color: white;
-      background: black;
-    }
-
-    body.light {
-      color: black;
-      background: white;
     }
 
     /* NAVBAR */
@@ -31,46 +26,38 @@
       top: 0;
       width: 100%;
       display: flex;
-      justify-content: center;
-      gap: 30px;
-      padding: 15px;
+      justify-content: space-between;
+      align-items: center;
+      padding: 15px 30px;
       backdrop-filter: blur(10px);
       z-index: 1000;
     }
 
-    body.dark .navbar {
-      background: rgba(0,0,0,0.6);
-    }
-
-    body.light .navbar {
-      background: rgba(255,255,255,0.7);
+    .nav-links {
+      display: flex;
+      gap: 30px;
     }
 
     .navbar a {
-      cursor: pointer;
-      text-decoration: none;
-      font-size: 18px;
-      transition: 0.3s;
-    }
-
-    body.dark .navbar a {
       color: white;
-    }
-
-    body.light .navbar a {
-      color: black;
+      text-decoration: none;
+      cursor: pointer;
+      transition: 0.3s;
     }
 
     .navbar a:hover {
       color: #a855f7;
+      text-shadow: 0 0 10px #a855f7;
     }
 
-    /* TOGGLE BUTTON */
     .toggle {
-      position: absolute;
-      right: 20px;
+      font-size: 22px;
       cursor: pointer;
-      font-size: 20px;
+      transition: 0.3s;
+    }
+
+    .toggle:hover {
+      transform: scale(1.2);
     }
 
     /* SECTIONS */
@@ -79,78 +66,102 @@
       width: 100%;
       height: 100vh;
       display: flex;
+      flex-direction: column;
       justify-content: center;
       align-items: center;
-      flex-direction: column;
       text-align: center;
-
       opacity: 0;
-      transform: translateY(20px);
-      transition: 0.4s;
       pointer-events: none;
+      transition: opacity 0.6s ease;
+      background-size: 400% 400%;
+      animation: gradientMove 15s ease infinite;
     }
 
-    .section.active {
+    .active {
       opacity: 1;
-      transform: translateY(0);
-      pointer-events: auto;
+      pointer-events: all;
     }
 
-    /* BACKGROUNDS */
+    /* GRADIENT ANIMATION */
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* DARK MODE */
+    body.dark {
+      color: white;
+    }
+
     body.dark #about {
-      background: linear-gradient(135deg, #000000, #4c1d95);
+      background: linear-gradient(270deg, #000000, #4c1d95, #000000);
     }
 
     body.dark #projects {
-      background: linear-gradient(135deg, #020617, #1e3a8a);
+      background: linear-gradient(270deg, #020617, #1e3a8a, #020617);
     }
 
     body.dark #contact {
-      background: linear-gradient(135deg, #000000, #312e81);
+      background: linear-gradient(270deg, #000000, #312e81, #000000);
+    }
+
+    /* LIGHT MODE */
+    body.light {
+      color: black;
     }
 
     body.light #about {
-      background: linear-gradient(135deg, #ffffff, #e9d5ff);
+      background: linear-gradient(270deg, #ffffff, #e9d5ff, #ffffff);
     }
 
     body.light #projects {
-      background: linear-gradient(135deg, #ffffff, #dbeafe);
+      background: linear-gradient(270deg, #ffffff, #dbeafe, #ffffff);
     }
 
     body.light #contact {
-      background: linear-gradient(135deg, #ffffff, #ddd6fe);
+      background: linear-gradient(270deg, #ffffff, #ddd6fe, #ffffff);
     }
 
+    /* TEXT */
     h1 {
-      font-size: 60px;
-      margin: 0;
+      font-size: 70px;
       color: #a855f7;
-      text-shadow: 0 0 10px #a855f7;
+      text-shadow: 0 0 20px #a855f7;
     }
 
     p {
-      max-width: 500px;
+      margin-top: 10px;
       opacity: 0.8;
+    }
+
+    /* PROJECT CARD */
+    .project {
+      margin-top: 30px;
+      padding: 20px;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.05);
+      backdrop-filter: blur(10px);
+      transition: 0.3s;
+    }
+
+    .project:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px #a855f7;
     }
 
     /* SOCIALS */
     .socials a {
       margin: 15px;
       font-size: 30px;
+      color: inherit;
       transition: 0.3s;
-    }
-
-    body.dark .socials a {
-      color: white;
-    }
-
-    body.light .socials a {
-      color: black;
     }
 
     .socials a:hover {
       color: #a855f7;
-      transform: scale(1.3);
+      transform: scale(1.2);
+      text-shadow: 0 0 15px #a855f7;
     }
 
   </style>
@@ -160,28 +171,34 @@
 
   <!-- NAVBAR -->
   <div class="navbar">
-    <a onclick="showSection('about')">About</a>
-    <a onclick="showSection('projects')">Projects</a>
-    <a onclick="showSection('contact')">Contact</a>
+    <div class="nav-links">
+      <a onclick="showSection('about')">About</a>
+      <a onclick="showSection('projects')">Projects</a>
+      <a onclick="showSection('contact')">Contact</a>
+    </div>
 
     <span class="toggle" onclick="toggleTheme()">🌙</span>
   </div>
 
   <!-- ABOUT -->
-  <div id="about" class="section active">
+  <div class="section active" id="about">
     <h1>kaiweb</h1>
-    <p>This is my website.</p>
+    <p>clean. simple. mine.</p>
   </div>
 
   <!-- PROJECTS -->
-  <div id="projects" class="section">
-    <h2>Projects</h2>
-    <p>Projects coming soon...</p>
+  <div class="section" id="projects">
+    <h1>projects</h1>
+
+    <div class="project">
+      <h2>To-Do App</h2>
+      <p>a simple task manager i built</p>
+    </div>
   </div>
 
   <!-- CONTACT -->
-  <div id="contact" class="section">
-    <h2>Contact</h2>
+  <div class="section" id="contact">
+    <h1>socials</h1>
 
     <div class="socials">
       <a href="https://instagram.com/pro191013" target="_blank">
@@ -208,31 +225,18 @@
       document.querySelectorAll('.section').forEach(sec => {
         sec.classList.remove('active');
       });
+
       document.getElementById(id).classList.add('active');
     }
 
     function toggleTheme() {
       const body = document.body;
-      const toggle = document.querySelector(".toggle");
+      const toggle = document.querySelector('.toggle');
 
-      body.classList.toggle("dark");
-      body.classList.toggle("light");
+      body.classList.toggle('light');
+      body.classList.toggle('dark');
 
-      if (body.classList.contains("light")) {
-        toggle.textContent = "☀️";
-        localStorage.setItem("theme", "light");
-      } else {
-        toggle.textContent = "🌙";
-        localStorage.setItem("theme", "dark");
-      }
-    }
-
-    // load saved theme
-    const savedTheme = localStorage.getItem("theme");
-    if (savedTheme) {
-      document.body.className = savedTheme;
-      document.querySelector(".toggle").textContent =
-        savedTheme === "light" ? "☀️" : "🌙";
+      toggle.textContent = body.classList.contains('dark') ? '🌙' : '☀️';
     }
   </script>
 
